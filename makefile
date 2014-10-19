@@ -1,8 +1,8 @@
 CC=clang++
-CFLAGS=-c -O3 -w -std=c++11
+CFLAGS=-c -O3 -w -std=c++11 
 LDFLAGS=
-SOURCES=main.cpp SingleCharacterSeparater.cpp TextClassifier.cpp BayesianTextClassifier.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
+SOURCES = SingleCharacterSeparater.cpp TextClassifier.cpp BayesianTextClassifier.cpp main.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE=main
 
 all:clean0 $(SOURCES) $(EXECUTABLE) clean1

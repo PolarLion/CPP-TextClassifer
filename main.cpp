@@ -1,4 +1,6 @@
-﻿#include <iostream>
+﻿#pragma once
+
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <map>
@@ -33,7 +35,7 @@ void test_svmtextc(int num);
 int main()
 {
 //  test_svmtextc(800);
-  CTextClassifier tc("", 4, codingtype::SeparaterType::GBK);
+  TextClassifier tc(4, codingtype::SeparaterType::GBK);
   printf("what's wrong\n");
   // keep_window_open();
   return 0;
