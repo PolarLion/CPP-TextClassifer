@@ -32,15 +32,25 @@ using std::ifstream;
 
 void test_svmtextc(int num);
 
+void fool_test();
+
 int main()
 {
 //  test_svmtextc(800);
   TextClassifier tc(4, codingtype::SeparaterType::GBK);
+  //char_separator
+  fool_test();
   printf("what's wrong\n");
   // keep_window_open();
   return 0;
 }
 
+void fool_test()
+{
+  bool drop[256] = {false};
+  for (int i = 0; i < 256; i++)
+    printf("%d\n", drop[i]);
+}
 
 // void test_svmtextc(int num)
 // {

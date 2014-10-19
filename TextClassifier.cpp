@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <ctime>
+#include <string>
 #include <sstream>
 #include <fstream>
 #include <unordered_set>
@@ -19,24 +20,35 @@
 
 const char SPACE = 32;
 
-void char_separator(std::vector<std::string>& tokens, const std::string& s, const std::string& drop_char)
+
+void char_separator(std::vector<std::string>& tokens, const char* str, const char* drop_char)
 {
-  std::unordered_set<char> drops;
-  std::for_each(drop_char.begin(), drop_char.end(), [&drops](char c){drops.insert(c);});
-  std::string temp;
-  for(std::string::const_iterator p = s.begin(); p != s.end(); ++p) {
-    if ( drops.end() != drops.find(*p)) {
-      if ( !temp.empty() )
-        tokens.push_back(temp);
-          temp.clear();
-      }
-      else {
-        temp += *p;
-      }
+  bool drop[256] = {false};
+  int length = sizeof(drop_char);
+  for (int i = 0; i < length; i++) {
+    drop[(int)drop_char[i]] = true;
   }
-  if ( !temp.empty() )
-     tokens.push_back(temp);
-  temp.clear();
+  length = sizeof(str);
+  std::string temp;
+  for (int i = 0; i < length; i++) {
+    if (drop[(int)str[i]]) {
+      temp += *str[i];
+    }
+  }
+  // std::string temp;
+  // for(std::string::const_iterator p = s.begin(); p != s.end(); ++p) {
+  //   if ( drops.end() != drops.find(*p)) {
+  //     if ( !temp.empty() )
+  //       tokens.push_back(temp);
+  //         temp.clear();
+  //     }
+  //     else {
+  //       temp += *p;
+  //     }
+  // }
+  // if ( !temp.empty() )
+  //    tokens.push_back(temp);
+  // temp.clear();
 }
 
 #ifdef __linux__
@@ -115,7 +127,7 @@ void TextClassifier::add_train_data(const char* classname, const char* buffer)
 
   std::ofstream outfile(training_file_path);
   if ( outfile.fail() ) {
-    printf("TextClassifier::add_train_data(): error in opening &strain.txt\n", training_file_path;
+    printf("TextClassifier::add_train_data(): error in opening &strain.txt\n", training_file_path);
     return;
   }
 
