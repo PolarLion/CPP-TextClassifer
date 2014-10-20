@@ -37,10 +37,10 @@ void fool_test();
 int main()
 {
 //  test_svmtextc(800);
-  TextClassifier tc(4, codingtype::SeparaterType::GBK);
+  TextClassifier tc(4, codingtype::SeparaterType::GBK, classifiertype::ClassifierType::Bayesian);
   //char_separator
   fool_test();
-  printf("what's wrong\n");
+  // printf("what's wrong\n");
   // keep_window_open();
   return 0;
 }

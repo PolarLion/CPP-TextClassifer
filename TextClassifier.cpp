@@ -13,6 +13,7 @@
 #include <chrono>
 #include <cstdio>
 #include <stdlib.h>
+#include <string.h>
 #include <algorithm>
 #include <vector>
 
@@ -21,35 +22,24 @@
 const char SPACE = 32;
 
 
-void char_separator(std::vector<std::string>& tokens, const char* str, const char* drop_char)
-{
-  bool drop[256] = {false};
-  int length = sizeof(drop_char);
-  for (int i = 0; i < length; i++) {
-    drop[(int)drop_char[i]] = true;
-  }
-  length = sizeof(str);
-  std::string temp;
-  for (int i = 0; i < length; i++) {
-    if (drop[(int)str[i]]) {
-      temp += *str[i];
-    }
-  }
-  // std::string temp;
-  // for(std::string::const_iterator p = s.begin(); p != s.end(); ++p) {
-  //   if ( drops.end() != drops.find(*p)) {
-  //     if ( !temp.empty() )
-  //       tokens.push_back(temp);
-  //         temp.clear();
-  //     }
-  //     else {
-  //       temp += *p;
-  //     }
-  // }
-  // if ( !temp.empty() )
-  //    tokens.push_back(temp);
-  // temp.clear();
-}
+// void char_separator(std::vector<std::string>& tokens, const char* str, const char* drop_char)
+// {
+//   bool drop[256] = {false};
+//   int length = sizeof(drop_char);
+//   for (int i = 0; i < length; i++) {
+//     drop[(int)drop_char[i]] = true;
+//   }
+//   length = sizeof(str);
+//   std::string temp;
+//   for (int i = 0; i < length; i++) {
+//     if (drop[(int)str[i]] && !temp.empty()) {
+//       tokens.push_back(temp);
+//       temp.clear();
+//     }
+//     else {
+//     }
+//   }
+// }
 
 #ifdef __linux__
   const char* training_file_path = "io/train.txt";
@@ -111,7 +101,7 @@ void TextClassifier::load_features()
 }
 
 
-void TextClassifier::add_train_data(const char* classname, const char* buffer)
+void TextClassifier::add_train_data(const char* classname, char* data)
 {
 
   // if ( !prepare_cts) {
@@ -130,7 +120,11 @@ void TextClassifier::add_train_data(const char* classname, const char* buffer)
     printf("TextClassifier::add_train_data(): error in opening &strain.txt\n", training_file_path);
     return;
   }
+  char* temp = NULL;
+  do {
+    temp = strtok_r(data, " \t", NULL);
 
+  }while( NULL != temp );
   // int i = 0;
   // for (auto p = features.begin(); p != features.end(); ++p) {
   //   auto tp = bag.find(*p);

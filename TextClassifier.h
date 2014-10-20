@@ -36,12 +36,11 @@ public:
 	~TextClassifier();
 
 	void load_features();
-	void add_train_data(const char* classname, const char* buffer);
+	void add_train_data(const char* classname, char* buffer);
 
 	void prepare_training_file();
 	void classifier_train();
 	bool load_data();
 	// void add_classname(const std::string& classname);
 };
-
 
