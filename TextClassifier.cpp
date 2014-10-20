@@ -44,12 +44,14 @@ const char SPACE = 32;
 #ifdef __linux__
   const char* training_file_path = "io/train.txt";
   const char* model_file_path = "io/model.txt";
-  const char* features_file_path = "io/featrues.txt";
+  const char* gbk_features_file_path = "io/gbkfeatrues.txt";
+  const char* utf8_features_file_path = "io/utf8features.txt";
   const char* result_file_path = "io/result.txt";
 #else
   const char* training_file_path = "io\\train.txt";
   const char* model_file_path = "io\\model.txt";
-  const char* features_file_path = "io\\featrues.txt";
+  const char* gbk_features_file_path = "io\\gbkfeatrues.txt";
+  const char* utf8_features_file_path = "io\\utf8features.txt";
   const char* result_file_path = "io\\result.txt";
 #endif
 
@@ -64,6 +66,7 @@ TextClassifier::TextClassifier(
   , classifier_type(classifier_t)
   , count_classnum(0)
   , count_training_set(0)
+  , cts(false)
   , classifier(NULL)
 {
   if ( classifiertype::ClassifierType::Bayesian == classifier_type ) {
@@ -97,12 +100,11 @@ TextClassifier::~TextClassifier()
 
 void TextClassifier::load_features()
 {
-  features.clear();
   std::ifstream infile;
-  if (codingtype::UTF8 == encoding)
-    infile.open(work_path+"utf8features.txt");
-  else if(codingtype::GBK == encoding)
-    infile.open(work_path+"gbkfeatures.txt");
+  if (codingtype::UTF8 == encoding_type)
+    infile.open(utf8_features_file_path);
+  else if(codingtype::GBK == encoding_type)
+    infile.open(gbk_features_file_path);
 
   if (infile.fail()) {
     printf("TextClassifier::load_features(): error open features.txt\n");
@@ -110,12 +112,34 @@ void TextClassifier::load_features()
   }
   int i = 0;
   while (!infile.eof() && i < features_num) {
-    string line;
+    std::string line;
     std::getline(infile, line);
-    i++;
+    if (line.size() > 0){
+      features[i] = line;
+      ++i;
+    }
   }
-  // cout << "feature : "<< features.size() << " features num : " << features_num << endl;
+  printf ("out TextClassifier::load_features(): features num = %d, size of features = %d\n", features_num, i);
+  // std::cout << "feature : "<< features.size() << " features num : " << features_num << endl;
   infile.close();
+}
+
+
+void SVMTextClassifier::prepare_classname_to_string()
+{
+  for (int i = 0; i < count_classnum; ++i) {
+    string str;
+    for (int j = 0; j < count_classnum; ++j) {
+      if (i == j) {
+        str += "1 ";
+      }
+      else {
+        str += "0 ";
+      }
+    }
+    class_to_string_map[i] = str;
+  }
+  prepare_cts = true;
 }
 
 

@@ -21,10 +21,13 @@ private:
   std::string features[FEATURE_NUM];
 	short count_classnum;
 	int count_training_set;
+	bool cts;
 
 	Classifier* classifier;
 
 	char first_trainfile_line[128];
+
+	std::unordered_map<std::string, std::string> class_to_string_map;
 	
 	mutable SingleCharacterSeparater separater;
 public:
