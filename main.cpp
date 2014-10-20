@@ -38,8 +38,10 @@ int main()
 {
 //  test_svmtextc(800);
   TextClassifier tc(4, codingtype::SeparaterType::GBK, classifiertype::ClassifierType::Bayesian);
+  char str[] = "hello, world!";
+  tc.add_train_data("1", str);
   //char_separator
-  fool_test();
+  // fool_test();
   // printf("what's wrong\n");
   // keep_window_open();
   return 0;

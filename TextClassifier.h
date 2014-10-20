@@ -8,8 +8,7 @@
 #include "Classifier.h"
 #include "SingleCharacterSeparater.h"
 
-
-void char_separator(std::vector<std::string>& tokens, const std::string& s, const std::string& drop_char);
+#define FEATURE_NUM 3500
 
 
 class TextClassifier
@@ -19,6 +18,7 @@ private:
 	const int features_num;
 	const classifiertype::ClassifierType classifier_type;
   
+  std::string features[FEATURE_NUM];
 	short count_classnum;
 	int count_training_set;
 
@@ -36,7 +36,7 @@ public:
 	~TextClassifier();
 
 	void load_features();
-	void add_train_data(const char* classname, char* buffer);
+	void add_train_data(const char* classname, char *data);
 
 	void prepare_training_file();
 	void classifier_train();

@@ -87,56 +87,80 @@ TextClassifier::TextClassifier(
 
 TextClassifier::~TextClassifier()
 {
-  printf ("in TextClassifier::~TextClassifier()\n");
+  printf ("TextClassifier::~TextClassifier()\n");
   if ( NULL != classifier )
     delete classifier;
   classifier = NULL;
-  printf ("out TextClassifier::~TextClassifier()\n");
+  printf ("TextClassifier::~TextClassifier()\n");
 }
 
 
 void TextClassifier::load_features()
 {
+  features.clear();
+  std::ifstream infile;
+  if (codingtype::UTF8 == encoding)
+    infile.open(work_path+"utf8features.txt");
+  else if(codingtype::GBK == encoding)
+    infile.open(work_path+"gbkfeatures.txt");
 
+  if (infile.fail()) {
+    printf("TextClassifier::load_features(): error open features.txt\n");
+    return;
+  }
+  int i = 0;
+  while (!infile.eof() && i < features_num) {
+    string line;
+    std::getline(infile, line);
+    i++;
+  }
+  // cout << "feature : "<< features.size() << " features num : " << features_num << endl;
+  infile.close();
 }
 
 
-void TextClassifier::add_train_data(const char* classname, char* data)
+void TextClassifier::add_train_data(const char* classname, char *data)
 {
-
   // if ( !prepare_cts) {
   //   prepare_classname_to_string();
   // }
-  // std::unordered_map<string, int> bag;
-  // vector<string> tok;
-  // separater(buffer, tok, encoding);
-  // int count_word = 0;
-  // std::for_each (tok.begin(), tok.end(), [&bag, &count_word](std::string s){
-  //   bag[s]++;
-  //   count_word++;});
+  std::unordered_map<std::string, int> bag;
 
-  std::ofstream outfile(training_file_path);
+  int count_word = 0;
+  
+  std::ofstream outfile(training_file_path, std::ios::app);
   if ( outfile.fail() ) {
     printf("TextClassifier::add_train_data(): error in opening &strain.txt\n", training_file_path);
+    outfile.close();
     return;
   }
+  const char *dropchar = " \t.,!?;-+";
   char* temp = NULL;
-  do {
-    temp = strtok_r(data, " \t", NULL);
+  char* t2 = NULL;
+  temp = strtok_r(data, dropchar, &t2);
+  while ( NULL != temp ) {
+    bag[temp]++;
+    ++count_word;
+    temp = strtok_r(NULL, dropchar, &t2);
+  }
 
-  }while( NULL != temp );
-  // int i = 0;
-  // for (auto p = features.begin(); p != features.end(); ++p) {
-  //   auto tp = bag.find(*p);
-  //   if (tp != bag.end()) {
-  //     outfile << tp->second << " ";
-  //   }
-  //   else {
-  //     outfile << 0 << " ";
-  //   }
-  //   ++i;
+  // for (auto p = bag.begin(); p != bag.end(); ++p) {
+  //   std::cout << p->first << " " << p->second << std::endl;
   // }
+
+  for (int i = 0; i < features_num; ++i) {
+    std::unordered_map<std::string, int>::iterator p = bag.find(features[i]);
+    if ( p != bag.end()) {
+      outfile << (double)p->second / count_word << " ";
+      std::cout << (double)p->second / count_word << " ";
+    }
+    else {
+      outfile << 0 << " ";
+      std::cout << 0 << " ";
+    }
+  }
+
   // outfile << std::endl << class_to_string_map[classname_to_int(classname)] << std::endl;
-  // count_training_set++;
+  count_training_set++;
   outfile.close();
 }
