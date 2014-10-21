@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Classifier.h"
-
+#include <unordered_map>
 
 struct Item {
-	char *key;
-	double *value;
+	double *v;
 };
 
 
@@ -14,7 +13,8 @@ class BayesianTextClassifier:public Classifier
 private:
 	int class_num;
 	int features_num;
-	Item *table;
+  int training_size;
+	Item *bayesiantable;
   void train_model();
 public:
 	BayesianTextClassifier(const char* config_file);
