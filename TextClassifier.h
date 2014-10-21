@@ -5,6 +5,7 @@
 #include <string>
 #include <algorithm>
 
+
 #include "Classifier.h"
 #include "SingleCharacterSeparater.h"
 
@@ -26,8 +27,6 @@ private:
 	Classifier* classifier;
 
 	char first_trainfile_line[128];
-
-	std::unordered_map<std::string, std::string> class_to_string_map;
 	
 	mutable SingleCharacterSeparater separater;
 public:
@@ -39,6 +38,8 @@ public:
 	~TextClassifier();
 
 	void load_features();
+	void set_traing_size(int size);
+	void set_classes(int size, char* classesname);
 	void add_train_data(const char* classname, char *data);
 
 	void prepare_training_file();

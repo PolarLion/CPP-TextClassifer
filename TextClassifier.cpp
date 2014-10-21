@@ -125,22 +125,6 @@ void TextClassifier::load_features()
 }
 
 
-void SVMTextClassifier::prepare_classname_to_string()
-{
-  for (int i = 0; i < count_classnum; ++i) {
-    string str;
-    for (int j = 0; j < count_classnum; ++j) {
-      if (i == j) {
-        str += "1 ";
-      }
-      else {
-        str += "0 ";
-      }
-    }
-    class_to_string_map[i] = str;
-  }
-  prepare_cts = true;
-}
 
 
 void TextClassifier::add_train_data(const char* classname, char *data)
