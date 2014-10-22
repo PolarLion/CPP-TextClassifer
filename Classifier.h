@@ -12,8 +12,6 @@ namespace classifiertype{
 
 class Classifier
 {
-private:
-  virtual void train_model() = 0;
 public:
   Classifier(){}
   ~Classifier(){}
@@ -21,6 +19,6 @@ public:
 	virtual void train_on_file(const char* training_file) = 0;
 	virtual void save_model(const char* model_file) = 0;
   virtual void load_model(const char* model_file) = 0;
-	virtual void predicted_category(const char* input_file) = 0;
+	virtual void predicted_category(const double* features, int& res) = 0;
   virtual void free_model() = 0;
 };

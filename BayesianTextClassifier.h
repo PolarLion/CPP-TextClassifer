@@ -14,8 +14,8 @@ private:
 	int class_num;
 	int features_num;
   int training_size;
+  bool free;
 	Item *bayesiantable;
-  void train_model();
 public:
   BayesianTextClassifier();
 	BayesianTextClassifier(const char* config_file);
@@ -24,6 +24,6 @@ public:
   void train_on_file(const char* training_file);
   void save_model(const char* model_file);
   void load_model(const char* model_file);
-  void predicted_category(const char* input_file);
+  void predicted_category(const double* features, int& res);
   void free_model();
 };

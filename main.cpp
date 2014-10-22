@@ -47,6 +47,7 @@ int main()
   // fool_test();
   // printf("what's wrong\n");
   // keep_window_open();
+  test_Bayesizn();
   return 0;
 }
 
@@ -54,7 +55,16 @@ int main()
 void test_Bayesizn()
 {
   Classifier *p = new BayesianTextClassifier();
-
+  p->train_on_file("io/train.txt");
+  p->save_model("io/model.txt");
+  p->load_model("io/model.txt");
+  double d1[] = { 0.0, 0.2, 0.2, 0.4 };
+  double d2[] ={0.2, 0.2, 0.3, 0.3};
+  int c;
+  p->predicted_category(d1, c);
+  printf ("predicted category is %d\n", c);
+  p->predicted_category(d2, c);
+  printf ("predicted category is %d\n", c);
   delete p;
 }
 
