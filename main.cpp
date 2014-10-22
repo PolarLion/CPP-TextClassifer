@@ -34,11 +34,14 @@ void test_svmtextc(int num);
 
 void fool_test();
 
+void test_Bayesizn();
+
 int main()
 {
 //  test_svmtextc(800);
-  TextClassifier tc(4, codingtype::SeparaterType::GBK, classifiertype::ClassifierType::Bayesian);
-  char str[] = "hello, world!";
+  // TextClassifier tc(4, codingtype::SeparaterType::GBK, classifiertype::ClassifierType::Bayesian);
+  // char str[] = "hello, world!";
+  
   // tc.add_train_data("1", str);
   //char_separator
   // fool_test();
@@ -47,12 +50,19 @@ int main()
   return 0;
 }
 
+
+void test_Bayesizn()
+{
+  Classifier *p = new BayesianTextClassifier();
+
+  delete p;
+}
+
 void fool_test()
 {
-  bool drop[256] = {false};
-  for (int i = 0; i < 256; i++)
-    printf("%d\n", drop[i]);
+
 }
+
 
 // void test_svmtextc(int num)
 // {

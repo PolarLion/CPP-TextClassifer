@@ -17,6 +17,7 @@ private:
 	Item *bayesiantable;
   void train_model();
 public:
+  BayesianTextClassifier();
 	BayesianTextClassifier(const char* config_file);
 	~BayesianTextClassifier();
   void init_model(const char* config_file);
