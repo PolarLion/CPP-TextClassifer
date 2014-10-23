@@ -68,11 +68,10 @@ TextClassifier::TextClassifier(
 
 TextClassifier::~TextClassifier()
 {
-  printf ("TextClassifier::~TextClassifier()\n");
+  classifier->free_model();
   if ( NULL != classifier )
     delete classifier;
   classifier = NULL;
-  printf ("TextClassifier::~TextClassifier()\n");
 }
 
 void TextClassifier::load_features()
@@ -102,17 +101,17 @@ void TextClassifier::load_features()
 
 void TextClassifier::training_on_file()
 {
-  classifier->train_on_file( training_file_path );
+  classifier->train_on_file (training_file_path);
   printf ("TextClassifier::training_on_file() : finished training on file\n");
-  classifier->save_model( model_file_path );
+  classifier->save_model (model_file_path);
   printf ("TextClassifier::training_on_file() : finished saving model\n");
-  classifier->free_model();
+  classifier->free_model ();
   printf ("TextClassifier::training_on_file() : finished free model\n");
 }
 
 bool TextClassifier::load_data()
 {
-  classifier->load_model( model_file_path );
+  classifier->load_model (model_file_path);
 }
 
 const char* TextClassifier::predicted_category(const char* data) const

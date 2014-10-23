@@ -31,26 +31,26 @@ void keep_window_open()
 using std::ifstream;
 
 void test_svmtextc(int num);
-
 void fool_test();
-
 void test_Bayesizn();
+void test_TC();
 
 int main()
 {
 //  test_svmtextc(800);
-  // TextClassifier tc(4, codingtype::SeparaterType::GBK, classifiertype::ClassifierType::Bayesian);
-  // char str[] = "hello, world!";
-  
-  // tc.add_train_data("1", str);
-  //char_separator
+  test_TC();
   // fool_test();
-  // printf("what's wrong\n");
   // keep_window_open();
-  test_Bayesizn();
+  // printf ("%f\n", pow(0.5, 0.5));
+  // test_Bayesizn();
   return 0;
 }
 
+void test_TC()
+{
+  TextClassifier tc(4, codingtype::SeparaterType::GBK, classifiertype::ClassifierType::Bayesian);
+
+}
 
 void test_Bayesizn()
 {
@@ -58,8 +58,8 @@ void test_Bayesizn()
   p->train_on_file("io/train.txt");
   p->save_model("io/model.txt");
   p->load_model("io/model.txt");
-  double d1[] = {0.4, 0.2, 0.3, 0.3, 0.1};
-  double d2[] ={0.3, 0.2, 0.2, 0.4, 0.4};
+  double d1[] = {0.4, 0.2, 0.4, 0.3, 0.1};
+  double d2[] ={0.1, 0.2, 0.2, 0.4, 0.6};
   int c;
   p->predicted_category(d1, c);
   printf ("predicted category is %d\n", c);

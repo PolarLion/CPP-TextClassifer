@@ -14,7 +14,7 @@ private:
 	int class_num;
 	int features_num;
   int training_size;
-  bool free;
+  bool is_free;
 	Item *bayesiantable;
 public:
   BayesianTextClassifier();

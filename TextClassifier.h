@@ -26,9 +26,7 @@ private:
 	bool cts;
 
 	Classifier* classifier;
-
 	char first_trainfile_line[128];
-	
 public:
 	TextClassifier(
     int featurenum = 0, 
