@@ -58,8 +58,8 @@ void test_Bayesizn()
   p->train_on_file("io/train.txt");
   p->save_model("io/model.txt");
   p->load_model("io/model.txt");
-  double d1[] = { 0.0, 0.2, 0.2, 0.4 };
-  double d2[] ={0.2, 0.2, 0.3, 0.3};
+  double d1[] = {0.4, 0.2, 0.3, 0.3, 0.1};
+  double d2[] ={0.3, 0.2, 0.2, 0.4, 0.4};
   int c;
   p->predicted_category(d1, c);
   printf ("predicted category is %d\n", c);
