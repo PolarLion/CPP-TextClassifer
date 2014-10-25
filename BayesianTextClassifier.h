@@ -17,6 +17,7 @@ private:
 	Item *bayesiantable;
   
   void show_bayesiantable();
+  bool init_bayesiantable(int f, int c);
 public:
   BayesianTextClassifier();
 	~BayesianTextClassifier();
