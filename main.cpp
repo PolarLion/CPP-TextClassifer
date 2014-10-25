@@ -217,7 +217,7 @@ void test_tc(int num)
 	//cout << "total F : " << 2 * precision * drecall /(precision + drecall) << endl;
 	cout << "total accuracy :\t" << drecall << endl;
 
-  tc->show_model();
+  // tc->show_model();
 	return ;
  }
 
