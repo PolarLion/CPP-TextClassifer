@@ -36,7 +36,7 @@ void BayesianTextClassifier::show_bayesiantable()
 
 void BayesianTextClassifier::train_on_file(const char* training_file)
 {
-	printf("CBayesianTextClassifier::train_on_file() : start reading training file\n");
+	printf("BayesianTC::train_on_file() : start reading training file\n");
 	free_model();
 	FILE * pfile = fopen(training_file, "r");
 	if ( NULL == pfile ) { 
