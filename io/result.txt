@@ -128,3 +128,691 @@ C000014	6400	1599	0.972102	0.98	0.976035
 C000007	6400	1599	0.938374	0.923125	0.930687
 total :	0.875188
 
+Fri Oct 24 00:25:25 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:30:30 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:31:30 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:35:08 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:36:27 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:38:25 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:39:36 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:40:16 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:42:51 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:43:34 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:44:51 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:45:41 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 00:46:01 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 01:03:09 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 01:08:53 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 01:09:35 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 01:10:45 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 01:14:33 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.449438	0.888889	0.597015
+医药204	163	40	0.0344828	0.0243902	0.0285714
+total :	0.391304
+
+Fri Oct 24 01:15:42 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.451977	0.888889	0.599251
+医药204	163	40	0.0333333	0.0243902	0.028169
+total :	0.391304
+
+Fri Oct 24 01:17:36 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.451977	0.888889	0.599251
+医药204	163	40	0.0333333	0.0243902	0.028169
+total :	0.391304
+
+Fri Oct 24 01:18:52 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.451977	0.888889	0.599251
+医药204	163	40	0.0333333	0.0243902	0.028169
+total :	0.391304
+
+Fri Oct 24 01:21:13 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0	0	-nan
+体育450	360	89	0.440594	0.988889	0.609589
+total :	0.429952
+
+Fri Oct 24 12:37:14 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:37:50 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:43:41 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:44:51 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:47:19 2014
+features : 	100
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:47:47 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:51:52 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:52:15 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:53:10 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198068	1	0.330645
+total :	0.198068
+
+Fri Oct 24 12:57:27 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	0.198056	1	0.330629
+total :	0.198056
+
+Fri Oct 24 12:58:33 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.5	0.00584795	0.0115607
+政治505	129	32	0.196049	1	0.327827
+total :	0.19697
+
+Fri Oct 24 12:59:09 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.322034	1	0.487179
+total :	0.322034
+
+Sat Oct 25 14:39:45 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.437424	1	0.608622
+total :	0.437424
+
+Sat Oct 25 14:47:25 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.437424	1	0.608622
+total :	0.437424
+
+Sat Oct 25 14:48:08 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.207776	1	0.344064
+total :	0.207776
+
+Sat Oct 25 14:48:47 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.437424	1	0.608622
+total :	0.437424
+
+Sat Oct 25 15:07:50 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 15:08:34 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 15:32:12 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:38:19 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:38:57 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:40:28 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:46:29 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:47:19 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:47:39 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:47:44 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:53:34 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:55:25 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:56:31 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:58:45 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 15:59:08 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.353846	0.134503	0.194915
+体育450	360	89	0.432718	0.911111	0.586762
+total :	0.426488
+
+Sat Oct 25 15:59:46 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 16:03:57 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 16:05:48 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 16:06:51 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 16:07:37 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 16:08:41 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 16:11:19 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0	0	-nan
+体育450	360	89	0.436054	0.994444	0.606266
+total :	0.434994
+
+Sat Oct 25 16:20:27 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.736842	0.0818713	0.147368
+政治505	129	32	0.301158	0.604651	0.402062
+体育450	360	89	0.57563	0.761111	0.655502
+医药204	163	40	0.652174	0.276074	0.387931
+total :	0.499392
+
+Sat Oct 25 16:21:59 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.736842	0.0818713	0.147368
+政治505	129	32	0.301158	0.604651	0.402062
+体育450	360	89	0.57563	0.761111	0.655502
+医药204	163	40	0.652174	0.276074	0.387931
+total :	0.499392
+
+Sat Oct 25 16:24:51 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.736842	0.0818713	0.147368
+政治505	129	32	0.301158	0.604651	0.402062
+体育450	360	89	0.57563	0.761111	0.655502
+医药204	163	40	0.652174	0.276074	0.387931
+total :	0.499392
+
+Sat Oct 25 16:25:07 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.736842	0.0818713	0.147368
+政治505	129	32	0.301158	0.604651	0.402062
+体育450	360	89	0.57563	0.761111	0.655502
+医药204	163	40	0.652174	0.276074	0.387931
+total :	0.499392
+
+Sat Oct 25 16:25:40 2014
+features : 	10
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.736842	0.0818713	0.147368
+政治505	129	32	0.301158	0.604651	0.402062
+体育450	360	89	0.57563	0.761111	0.655502
+医药204	163	40	0.652174	0.276074	0.387931
+total :	0.499392
+
+Sat Oct 25 16:26:07 2014
+features : 	800
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.982249	0.922222	0.951289
+医药204	163	40	1	0.736196	0.848057
+政治505	129	32	0.617225	1	0.763314
+交通214	171	42	1	0.912281	0.954128
+total :	0.895504
+
+Sat Oct 25 16:26:25 2014
+features : 	1000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.985465	0.941667	0.963068
+医药204	163	40	1	0.730061	0.843972
+政治505	129	32	0.638614	1	0.779456
+交通214	171	42	1	0.923977	0.960486
+total :	0.905225
+
+Sat Oct 25 16:28:51 2014
+features : 	1000
+class name	training set	testing set	precision	recall rate	F value
+C000010	6400	1599	0.911765	0.0145313	0.0286066
+C000013	6400	1599	0.900041	0.344687	0.498475
+C000020	6400	1599	0.745137	0.646406	0.692269
+C000008	6400	1599	0.807352	0.569688	0.66801
+C000022	6400	1599	0.581084	0.393594	0.469306
+C000024	6400	1599	0.852353	0.718906	0.779963
+C000007	6400	1599	0.880545	0.626563	0.732153
+C000014	6400	1599	0.877401	0.799531	0.836658
+C000023	6400	1599	0.208782	0.947969	0.342198
+C000016	6400	1599	0.913221	0.314063	0.467388
+total :	0.537594
+
+Sat Oct 25 16:33:40 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+C000010	6400	1599	0.906977	0.0182812	0.0358401
+C000013	6400	1599	0.90287	0.383437	0.538276
+C000020	6400	1599	0.734098	0.66	0.69508
+C000008	6400	1599	0.815087	0.624687	0.707298
+C000022	6400	1599	0.59665	0.400781	0.479484
+C000024	6400	1599	0.855052	0.748437	0.7982
+C000007	6400	1599	0.899955	0.62125	0.735071
+C000014	6400	1599	0.892464	0.810469	0.849492
+C000023	6400	1599	0.22025	0.945937	0.357305
+C000016	6400	1599	0.925243	0.415781	0.573739
+total :	0.562906
+
+Sat Oct 25 16:34:28 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.991202	0.938889	0.964337
+医药204	163	40	1	0.748466	0.85614
+政治505	129	32	0.641791	1	0.781818
+交通214	171	42	1	0.929825	0.963636
+total :	0.90887
+
+Sat Oct 25 16:34:55 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+政治505	129	32	1	0.0387597	0.0746269
+医药204	163	40	1	0.527607	0.690763
+体育450	360	89	0.56872	1	0.725076
+交通214	171	42	1	0.578947	0.733333
+total :	0.668287
+
+Sat Oct 25 16:37:19 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.437424	1	0.608622
+total :	0.437424
+
+Sat Oct 25 16:38:33 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.991202	0.938889	0.964337
+医药204	163	40	1	0.748466	0.85614
+政治505	129	32	0.641791	1	0.781818
+交通214	171	42	1	0.929825	0.963636
+total :	0.90887
+
+Sat Oct 25 16:39:16 2014
+features : 	3000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.982609	0.941667	0.961702
+医药204	163	40	1	0.754601	0.86014
+政治505	129	32	0.664948	1	0.798762
+交通214	171	42	1	0.94152	0.96988
+total :	0.91373
+
+Sat Oct 25 16:42:10 2014
+features : 	3000
+class name	training set	testing set	precision	recall rate	F value
+C000010	6400	1599	0.870229	0.0178125	0.0349104
+C000013	6400	1599	0.901904	0.392188	0.546662
+C000020	6400	1599	0.731513	0.661563	0.694782
+C000008	6400	1599	0.816803	0.622812	0.706738
+C000022	6400	1599	0.608685	0.405156	0.486492
+C000024	6400	1599	0.854329	0.752344	0.8001
+C000007	6400	1599	0.902077	0.6175	0.733142
+C000014	6400	1599	0.895054	0.811562	0.851266
+C000023	6400	1599	0.220849	0.946719	0.35815
+C000016	6400	1599	0.923872	0.419063	0.576588
+total :	0.564672
+
+Sat Oct 25 17:48:42 2014
+features : 	3000
+class name	training set	testing set	precision	recall rate	F value
+政治505	129	32	1	0.00775194	0.0153846
+医药204	163	40	1	0.447853	0.618644
+体育450	360	89	0.531758	1	0.694311
+交通214	171	42	1	0.421053	0.592593
+total :	0.614824
+
+Sat Oct 25 17:53:14 2014
+features : 	3000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.994186	0.95	0.971591
+医药204	163	40	1	0.858896	0.924092
+政治505	129	32	0.975207	0.914729	0.944
+交通214	171	42	0.784404	1	0.879177
+total :	0.936817
+
+Sat Oct 25 17:59:01 2014
+features : 	3000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.994186	0.95	0.971591
+医药204	163	40	1	0.858896	0.924092
+政治505	129	32	0.975207	0.914729	0.944
+交通214	171	42	0.784404	1	0.879177
+total :	0.936817
+
+Sat Oct 25 18:02:52 2014
+features : 	3000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	1	0.742331	0.852113
+体育450	360	89	0.966759	0.969444	0.9681
+政治505	129	32	0.708791	1	0.829582
+交通214	171	42	0.993711	0.923977	0.957576
+total :	0.919806
+
+Sat Oct 25 18:04:38 2014
+features : 	3000
+class name	training set	testing set	precision	recall rate	F value
+交通214	171	42	0.207776	1	0.344064
+total :	0.207776
+
+Sat Oct 25 18:06:19 2014
+features : 	3000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	1	0.742331	0.852113
+体育450	360	89	0.966759	0.969444	0.9681
+政治505	129	32	0.708791	1	0.829582
+交通214	171	42	0.993711	0.923977	0.957576
+total :	0.919806
+
+Sat Oct 25 18:10:46 2014
+features : 	1000
+class name	training set	testing set	precision	recall rate	F value
+C000020	6400	1599	0.787299	0.687656	0.734112
+C000008	6400	1599	0.754415	0.6475	0.696881
+C000024	6400	1599	0.865085	0.780469	0.820601
+C000022	6400	1599	0.641576	0.592656	0.616147
+C000014	6400	1599	0.923687	0.854844	0.887933
+C000007	6400	1599	0.769385	0.897656	0.828586
+C000023	6400	1599	0.303304	0.912188	0.45524
+C000016	6400	1599	0.907077	0.428594	0.582131
+C000013	6400	1599	0.905533	0.419375	0.573259
+C000010	6400	1599	0.847601	0.345	0.490394
+total :	0.656594
+
+Sat Oct 25 18:14:55 2014
+features : 	1000
+class name	training set	testing set	precision	recall rate	F value
+C000020	6400	1599	0.787299	0.687656	0.734112
+C000008	6400	1599	0.746578	0.647656	0.693608
+C000024	6400	1599	0.865085	0.780469	0.820601
+C000022	6400	1599	0.648044	0.592656	0.619114
+C000014	6400	1599	0.923687	0.854844	0.887933
+C000007	6400	1599	0.769385	0.897656	0.828586
+C000023	6400	1599	0.303304	0.912188	0.45524
+C000016	6400	1599	0.907077	0.428594	0.582131
+C000013	6400	1599	0.905533	0.419375	0.573259
+C000010	6400	1599	0.847601	0.345	0.490394
+total :	0.656609
+
+Sat Oct 25 18:26:11 2014
+features : 	1000
+class name	training set	testing set	precision	recall rate	F value
+C000020	6400	1599	0.775606	0.62	0.689128
+C000008	6400	1599	0.475142	0.664531	0.554101
+C000024	6400	1599	0.861932	0.747188	0.800469
+C000022	6400	1599	0.651647	0.562656	0.603891
+C000014	6400	1599	0.923169	0.844844	0.882271
+C000007	6400	1599	0.766046	0.861563	0.811002
+C000023	6400	1599	0.295915	0.803594	0.432548
+C000016	6400	1599	0.90693	0.423281	0.577181
+C000013	6400	1599	0.903745	0.403438	0.557848
+C000010	6400	1599	0.846124	0.341094	0.486192
+total :	0.627219
+
+Sat Oct 25 18:28:50 2014
+features : 	1000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	1	0.754601	0.86014
+体育450	360	89	0.961538	0.972222	0.966851
+政治505	129	32	0.724719	1	0.840391
+交通214	171	42	0.993671	0.918129	0.954407
+total :	0.922236
+
+Sat Oct 25 18:38:06 2014
+features : 	1000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	1	0.754601	0.86014
+体育450	360	89	0.961538	0.972222	0.966851
+政治505	129	32	0.724719	1	0.840391
+交通214	171	42	0.993671	0.918129	0.954407
+total :	0.922236
+
+Sat Oct 25 18:38:19 2014
+features : 	1000
+class name	training set	testing set	precision	recall rate	F value
+医药204	163	40	1	0.754601	0.86014
+体育450	360	89	0.961538	0.972222	0.966851
+政治505	129	32	0.724719	1	0.840391
+交通214	171	42	0.993671	0.918129	0.954407
+total :	0.922236
+
+Sat Oct 25 18:46:19 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.977401	0.961111	0.969188
+医药204	163	40	1	0.742331	0.852113
+政治505	129	32	0.68254	1	0.811321
+交通214	171	42	0.993711	0.923977	0.957576
+total :	0.91616
+
+Sat Oct 25 18:46:57 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.977401	0.961111	0.969188
+医药204	163	40	1	0.742331	0.852113
+政治505	129	32	0.68254	1	0.811321
+交通214	171	42	0.993711	0.923977	0.957576
+total :	0.91616
+
+Sat Oct 25 18:48:12 2014
+features : 	2000
+class name	training set	testing set	precision	recall rate	F value
+体育450	360	89	0.977401	0.961111	0.969188
+医药204	163	40	1	0.742331	0.852113
+政治505	129	32	0.68254	1	0.811321
+交通214	171	42	0.993711	0.923977	0.957576
+total :	0.91616
+
