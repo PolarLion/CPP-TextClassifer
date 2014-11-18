@@ -207,7 +207,9 @@ void RandomForestClassifer::load_model(const char* model_file)
 	}
 
 	char* buffer = NULL;
-	const size_t length = ftell (pfile);
+	const size_t lp = ftell (pfile);
+	fseek (pfile, 0, SEEK_END);
+	const size_t length = ftell (pfile) - lp;
   rewind (pfile);
   buffer = (char*) malloc (sizeof(char)*length);
   if (buffer == NULL) {

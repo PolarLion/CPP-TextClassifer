@@ -1,6 +1,7 @@
 
 #include "TextClassifier.h"
 #include "BayesianTextClassifier.h"
+#include "RandomForestClassifier.h"
 
 #include <cmath>
 #include <ctime>
@@ -73,8 +74,11 @@ TextClassifier::TextClassifier(
   if ( classifiertype::ClassifierType::Bayesian == classifier_type ) {
     classifier = new bayesianc::BayesianTextClassifier();
   }
+  else if ( classifiertype::ClassifierType::RandomForest == classifier_type ) {
+    classifier = new randomforestc::RandomForestClassifer();
+  }
   else {
-    //do nothing
+
   }
 
   if ( NULL == classifier ) {
