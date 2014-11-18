@@ -1,6 +1,6 @@
 // #pragma once
 
-#include "RandomForestClassifer.h"
+#include "RandomForestClassifier.h"
 #include <string>
 #include <stdio.h>
 #include <string.h>
