@@ -71,7 +71,7 @@ TextClassifier::TextClassifier(
   , classifier(NULL)
 {
   if ( classifiertype::ClassifierType::Bayesian == classifier_type ) {
-    classifier = new BayesianTextClassifier();
+    classifier = new bayesianc::BayesianTextClassifier();
   }
   else {
     //do nothing

@@ -7,13 +7,10 @@
 
 #define FIRST_LINE_SIZE 1000
 
+using namespace bayesianc;
 
 BayesianTextClassifier::BayesianTextClassifier()
-	: class_num(0)
-	, features_num(0)
-	, training_size(0)
-	, is_free(0)
-	, bayesiantable(NULL)
+	: bayesiantable(NULL)
 {
 }
 

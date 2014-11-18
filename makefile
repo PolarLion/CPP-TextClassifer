@@ -1,7 +1,12 @@
 CC=clang++
 CFLAGS=-c -O3 -Wall -std=c++11 
 LDFLAGS=
-SOURCES = SingleCharacterSeparater.cpp TextClassifier.cpp BayesianTextClassifier.cpp main.cpp
+SOURCES = SingleCharacterSeparater.cpp TextClassifier.cpp \
+	RandomForestClassifer.cpp BayesianTextClassifier.cpp \
+	ap.cpp alglibinternal.cpp linalg.cpp statistics.cpp \
+	alglibmisc.cpp specialfunctions.cpp solvers.cpp optimization.cpp \
+	dataanalysis.cpp \
+	main.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE=main
 

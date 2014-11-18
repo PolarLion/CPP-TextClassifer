@@ -15,7 +15,7 @@
 
 #include "TextClassifier.h"
 #include "BayesianTextClassifier.h"
-
+#include "RandomForestClassifer.h"
 
 
 using namespace std;
@@ -35,16 +35,19 @@ using std::ifstream;
 void test_tc(int num);
 void fool_test();
 void test_Bayesizn();
+void test_RFC();
 void test_TC();
 
 int main(int argc, char **argv)
 {
+  // test_tc(10);
   char *pend = NULL;
   // printf("%s\n", argv[0]);
   int num = strtol (argv[1], &pend, 10);
   test_tc(num);
   // test_TC();
   // fool_test();
+  test_RFC();
   // keep_window_open();
   // printf ("%f\n", pow(0.5, 0.5));
   // test_Bayesizn();
@@ -54,12 +57,17 @@ int main(int argc, char **argv)
 void test_TC()
 {
   TextClassifier tc(4, codingtype::SeparaterType::GBK, classifiertype::ClassifierType::Bayesian);
+}
 
+void test_RFC()
+{
+  randomforestc::RandomForestClassifer* p = new randomforestc::RandomForestClassifer();
+  delete p;
 }
 
 void test_Bayesizn()
 {
-  Classifier *p = new BayesianTextClassifier();
+  Classifier *p = new bayesianc::BayesianTextClassifier();
   p->train_on_file("io/train.txt");
   p->save_model("io/model.txt");
   p->free_model();
@@ -88,6 +96,7 @@ void test_tc(int num)
   const string working_path = "io/";
   unordered_map<string, vector<string>> class_map;
   string path = "../training_set/easy_train/";
+
   // string path = "../training_set/sougou_train/";
 
   vector<string> dirs;
@@ -216,6 +225,7 @@ void test_tc(int num)
 	//cout << "total precision : " << precision << endl;
 	//cout << "total F : " << 2 * precision * drecall /(precision + drecall) << endl;
 	cout << "total accuracy :\t" << drecall << endl;
+
 
   // tc->show_model();
 	return ;
