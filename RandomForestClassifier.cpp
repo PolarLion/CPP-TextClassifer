@@ -9,13 +9,13 @@
 using namespace randomforestc;
 
 RandomForestClassifer::RandomForestClassifer()
-	: n_trees (0)
+	: n_trees (50)
 {
 	printf("RandomForestClassifer\n");
 }
 
 RandomForestClassifer::RandomForestClassifer(const char* config_file)
-	: n_trees (0)
+	: n_trees (50)
 {
 	init_model (config_file);
 }
@@ -64,14 +64,14 @@ void RandomForestClassifer::train_on_file(const char* training_file)
 		exit(1);
 	}
 
-	double *alldata = (double*) malloc (sizeof(double)*(features_num + class_num)*training_size);
+	double *alldata = (double*) malloc (sizeof(double)*(features_num + 1)*training_size);
 	if ( NULL == alldata ) {
 		printf ("RandomForestClassifer::train_on_file() can't allocate memory for alldata\n");
 		exit(1);
 	}
 	// //edit the bayesiantable 
-	const int features_line_size = features_num * 10+ 1;
-	const int class_line_size = class_num * 2 + 1;
+	size_t features_line_size = features_num * 10+ 1;
+	size_t class_line_size = class_num * 2 + 1;
 	char *features_line = new char[features_line_size];
 	char *class_line = new char[class_line_size];
 	if ( NULL == features_line || NULL == class_line ) {
@@ -79,13 +79,14 @@ void RandomForestClassifer::train_on_file(const char* training_file)
 		exit (1);
 	}
 
-
 	int count_line = 1;
 	int current_index = 0;
-	while ( NULL != fgets (features_line, features_line_size, pfile)
+	printf("RandomForestClassifier::train_on_file() : start training training file\n");
+	while ( -1 != getline (&features_line, &features_line_size, pfile)
 	 	&& count_line < training_size * 2 + 1) {
+		// printf("features_line %s\n", features_line);
 		count_line++;
-		if ( NULL == fgets (class_line, class_line_size, pfile) ) {
+		if ( -1 == getline (&class_line, &class_line_size, pfile) ) {
 			printf ("RandomForestClassifer::train_on_file() : wrong traing file\
 				read line %d\n", count_line);
 			break;
@@ -93,23 +94,41 @@ void RandomForestClassifer::train_on_file(const char* training_file)
 		else { 
 			count_line++; 
 		}
-		int class_index = 0;
-			alldata[current_index++] = strtod (features_line, &pend);
+
+		// printf("class_line %s\n", class_line);
+		alldata[current_index++] = strtod (features_line, &pend);
 		for (int j = 1; j < features_num - 1; ++j) {
 			alldata[current_index++] = strtod (pend, &pend);
 		}
 		alldata[current_index++] = strtod (pend, NULL);
 
-		alldata[current_index++] = strtod (class_line, &pend);
-		for (int i = 1; i < class_num - 1; ++i) {
-			alldata[current_index++] = strtod (pend, &pend);
+		pend = NULL;
+		int class_index = 0;
+		if ( strtol (class_line, &pend, 10) != 1) {
+			int i = 1;
+			for (i = 1; i < class_num - 1; ++i) {
+				if ( strtol (pend, &pend, 10) == 1 ) {
+					class_index = i;
+					break;
+				}
+			}
+			if ( class_num - 1 == i && strtol (pend, NULL, 10) == 1 )
+				class_index = i;
 		}
-		alldata[current_index++] = strtod (pend, NULL);
+		// printf("train  %d %s= %d\n", count_line, class_line, class_index);
+		alldata[current_index++] = (double)class_index;
 		//get every feature value
 	}
 
-	xy.setcontent (training_size, features_num+class_num, alldata);
-	printf("CRandomForestClassifer::train_on_file() : start training training file\n");
+	xy.setcontent (training_size, features_num+1, alldata);
+
+	// for (int i = 0; i < training_size; ++i) {
+	// 	for (int j = 0; j < features_num+1; ++j) {
+	// 		/* code */
+	// 		printf("%f ", xy[i][j]);
+	// 	}
+	// 	printf("\n");
+	// }
 
 	alglib::dfbuildrandomdecisionforest(
     xy, //real_2d_array xy,
@@ -117,52 +136,17 @@ void RandomForestClassifer::train_on_file(const char* training_file)
     features_num, //ae_int_t nvars,
     class_num, //ae_int_t nclasses,
     n_trees, //ae_int_t ntrees,
-    0.8, //double r,
+    1.0, //double r,
     info,
     df, //decisionforest& df,
     dfrep //dfreport& rep
   );
- //  // for (int i = 0; i < 2; ++i) {
- //  //   for (int j = 0; j < class_num; ++j) {
- //  //     printf ("%f ", bayesiantable[i].v[j]);
- //  //   }
- //  //   printf ("\n");
- //  // }
-	
-	// //p(ti|ci) = (1 + tf(ti, ci)) / (features size + sum of tf(tj, ci));
-	// double *denominator = new double[class_num];
-	// if ( NULL == denominator ) {
-	// 	printf ("RandomForestClassifer::train_on_file() error allocate memory for double[]\n");
-	// 	exit(1);
-	// }
-	// for (int i = 0; i < class_num; ++i) {
-	// 	denominator[i] = 0;
-	// 	for (int j = 0; j < features_num; ++j) {
-	// 		denominator[i] += bayesiantable[j].v[i];
-	// 	}
-	// 	denominator[i] += features_num;
-	// }
-	// for (int i = 0; i < features_num; ++i) {
-	// 	for (int j = 0; j < class_num; ++j) {
-	// 		bayesiantable[i].v[j] += 1.0;
-	// 		bayesiantable[i].v[j] /= denominator[j];
-	// 		// printf ("%f ", bayesiantable[i].v[j]);
-	// 	}
-	// 	// printf ("\n");
-	// }
-	// is_free = false;
-	// fclose(pfile);
-	// delete denominator;
-	// delete features_line;
-	// delete class_line;
 
-	// // for (int i = 0; i < features_num; ++i) {
-	// // 	printf ("%d : ", i);
-	// // 	for (int j = 0; j < class_num; ++j) {
-	// // 		printf ("%f ", bayesiantable[i].v[j]);
-	// // 	}
-	// // 	printf ("\n");
-	// // }
+	is_free = false;
+	fclose(pfile);
+	delete features_line;
+	delete class_line;
+
 	printf("RandomForestClassifer::train_on_file() finished training !\n");
 }
 
@@ -193,6 +177,17 @@ void RandomForestClassifer::load_model(const char* model_file)
 		exit(1);
 	}
 	// // char *pend = NULL;
+	char* buffer = NULL;
+	// const size_t lp = ftell (pfile);
+	fseek (pfile, 0, SEEK_END);
+	const size_t length = ftell (pfile);
+  rewind (pfile);
+  buffer = (char*) malloc (sizeof(char)*length);
+  if (buffer == NULL) {
+  	printf("RandomForestClassifer::load_model() : can't allocate memory for buffer\n");
+  	exit (1);
+  }
+
   int temp[2];
 	if ( 0 != fread (temp, sizeof(int), 2, pfile) ) {
     features_num = temp[0];
@@ -206,18 +201,8 @@ void RandomForestClassifer::load_model(const char* model_file)
 		exit(1);
 	}
 
-	char* buffer = NULL;
-	const size_t lp = ftell (pfile);
-	fseek (pfile, 0, SEEK_END);
-	const size_t length = ftell (pfile) - lp;
-  rewind (pfile);
-  buffer = (char*) malloc (sizeof(char)*length);
-  if (buffer == NULL) {
-  	printf("RandomForestClassifer::load_model() : can't allocate memory for buffer\n");
-  	exit (1);
-  }
   size_t result = fread (buffer, 1, length, pfile);
-  if (result != length) {
+  if (result > length) {
   	printf ("andomForestClassifer::load_model() : Reading error\n"); 
   	exit (1);
   }
@@ -237,13 +222,22 @@ void RandomForestClassifer::predicted_category(const double* features, int& res)
 	// }
 	// printf("\n");
 	alglib::real_1d_array x, y;
+	double *yp = new double[class_num];
+	// for (int i = 0; i < class_num; ++i) {
+	// 	yp[i] = 0.0;
+	// }
+	y.setcontent (class_num, yp);
 	x.setcontent (features_num, features);
-
+	// for (int i = 0; i < features_num; ++i) {
+	// 	printf("%f ", x[i]);
+	// }
+	// printf("\n");
 	alglib::dfprocess ( df,/*decisionforest*/ x,/*real_1d_array*/ y/*real_1d_array&*/ );
+	// printf("x.length = %d, y.length = %d\n", x.length(), y.length());
 	res = 0;
-	double max = y[2];
+	double max = y[0];
 	for (int i = 0; i < class_num; ++i) {
-		printf ("%f ", y[i]);
+		// printf ("%f ", y[i]);
 		if ( max < y[i] ) {
 			max = y[i];
 			res = i;
@@ -251,6 +245,7 @@ void RandomForestClassifer::predicted_category(const double* features, int& res)
 	}
 
 	// printf ("res : %d\n", res);
+	delete yp;
 }
 
 void RandomForestClassifer::free_model()
