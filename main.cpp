@@ -15,7 +15,7 @@
 
 #include "TextClassifier.h"
 #include "BayesianTextClassifier.h"
-#include "RandomForestClassifer.h"
+#include "RandomForestClassifier.h"
 
 
 using namespace std;
@@ -45,9 +45,10 @@ int main(int argc, char **argv)
   // printf("%s\n", argv[0]);
   int num = strtol (argv[1], &pend, 10);
   test_tc(num);
+
   // test_TC();
   // fool_test();
-  test_RFC();
+  // test_RFC();
   // keep_window_open();
   // printf ("%f\n", pow(0.5, 0.5));
   // test_Bayesizn();
@@ -62,6 +63,18 @@ void test_TC()
 void test_RFC()
 {
   randomforestc::RandomForestClassifer* p = new randomforestc::RandomForestClassifer();
+  p->train_on_file("io/train.txt");
+  p->save_model("io/model.txt");
+  p->free_model();
+  p->load_model("io/model.txt");
+  double d1[] = {0.9, 0.8, 0.4, 0.3};
+  double d2[] ={0.1, 0.2, 0.9, 0.4};
+  int c = 0;
+  p->predicted_category(d1, c);
+  printf ("predicted category is %d\n", c);
+  c = 0;
+  p->predicted_category(d2, c);
+  printf ("predicted category is %d\n", c);
   delete p;
 }
 
@@ -91,13 +104,15 @@ void fool_test()
 void test_tc(int num)
 {
   const double ratio = 0.8;
-  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::Bayesian, "");
+  // TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::Bayesian, "");
+  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
   printf ("1\n");
   const string working_path = "io/";
   unordered_map<string, vector<string>> class_map;
-  string path = "../training_set/easy_train/";
+  // string path = "../training_set/easy_train/";
+  // string path = "../training_set/test_train/";
 
-  // string path = "../training_set/sougou_train/";
+  string path = "../training_set/sougou_train/";
 
   vector<string> dirs;
   get_dirs(path, dirs);
@@ -163,8 +178,8 @@ void test_tc(int num)
   	int count_right = 0;
   	int count = 0;
   	const int min = p->second.size() * ratio;
-  	// for (int i = min; i < p->second.size(); ++i) {
-  	for (int i = 0; i < min; ++i) {
+  	for (int i = min; i < p->second.size(); ++i) {
+  	// for (int i = 0; i < min; ++i) {
 	    string spath = path + p->first + "/" + p->second[i];
 	    ifstream infile(spath);
 	    if (infile.fail()) {
