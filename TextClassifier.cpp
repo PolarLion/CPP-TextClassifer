@@ -75,7 +75,7 @@ TextClassifier::TextClassifier(
     classifier = new bayesianc::BayesianTextClassifier();
   }
   else if ( classifiertype::ClassifierType::RandomForest == classifier_type ) {
-    classifier = new randomforestc::RandomForestClassifer();
+    classifier = new randomforestc::RandomForestClassifier();
   }
   else {
 

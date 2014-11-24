@@ -8,33 +8,33 @@
 
 using namespace randomforestc;
 
-RandomForestClassifer::RandomForestClassifer()
+RandomForestClassifier::RandomForestClassifier()
 	: n_trees (50)
 {
-	printf("RandomForestClassifer\n");
+	printf("RandomForestClassifier\n");
 }
 
-RandomForestClassifer::RandomForestClassifer(const char* config_file)
+RandomForestClassifier::RandomForestClassifier(const char* config_file)
 	: n_trees (50)
 {
 	init_model (config_file);
 }
 
-RandomForestClassifer::~RandomForestClassifer()
+RandomForestClassifier::~RandomForestClassifier()
 {
 	free_model();
-	printf ("RandomForestClassifer::~RandomForestClassifer()\n");
+	printf ("RandomForestClassifier::~RandomForestClassifier()\n");
 }
 
-void RandomForestClassifer::init_model(const char* config_file)
+void RandomForestClassifier::init_model(const char* config_file)
 {
-	// printf ("RandomForestClassifer:init_model() \n");
+	// printf ("RandomForestClassifier:init_model() \n");
 	//nothing to be inited
 }
 
-void RandomForestClassifer::train_on_file(const char* training_file)
+void RandomForestClassifier::train_on_file(const char* training_file)
 {
-	printf("CRandomForestClassifer::train_on_file() : start reading training file\n");
+	printf("CRandomForestClassifier::train_on_file() : start reading training file\n");
 	free_model();
 	alglib::real_2d_array xy;
 	alglib::dfreport dfrep;
@@ -42,7 +42,7 @@ void RandomForestClassifer::train_on_file(const char* training_file)
 	
 	FILE * pfile = fopen(training_file, "r");
 	if ( NULL == pfile ) { 
-		printf ("RandomForestClassifer::train_on_file() error in opening %s\n", training_file);
+		printf ("RandomForestClassifier::train_on_file() error in opening %s\n", training_file);
 		exit(1);
 	}
 
@@ -54,19 +54,19 @@ void RandomForestClassifer::train_on_file(const char* training_file)
 		training_size = strtol (first_line, &pend, 10);
 		features_num = strtol (pend, &pend, 10);
 		class_num = strtol (pend, NULL, 10);
-		printf ("RandomForestClassifer::train_on_file() :\
+		printf ("RandomForestClassifier::train_on_file() :\
 			training_size = %d, features_num = %d, class_num = %d\n", training_size, features_num, class_num);
 		is_free = false;
 	}
 	else {
-		printf ("RandomForestClassifer::train_on_file() : wrong traing file ---- error in \
+		printf ("RandomForestClassifier::train_on_file() : wrong traing file ---- error in \
 			reading first line\n");
 		exit(1);
 	}
 
 	double *alldata = (double*) malloc (sizeof(double)*(features_num + 1)*training_size);
 	if ( NULL == alldata ) {
-		printf ("RandomForestClassifer::train_on_file() can't allocate memory for alldata\n");
+		printf ("RandomForestClassifier::train_on_file() can't allocate memory for alldata\n");
 		exit(1);
 	}
 	// //edit the bayesiantable 
@@ -75,7 +75,7 @@ void RandomForestClassifer::train_on_file(const char* training_file)
 	char *features_line = new char[features_line_size];
 	char *class_line = new char[class_line_size];
 	if ( NULL == features_line || NULL == class_line ) {
-		printf ("RandomForestClassifer::train_on_file() error allocate memory for char[]\n");
+		printf ("RandomForestClassifier::train_on_file() error allocate memory for char[]\n");
 		exit (1);
 	}
 
@@ -87,7 +87,7 @@ void RandomForestClassifer::train_on_file(const char* training_file)
 		// printf("features_line %s\n", features_line);
 		count_line++;
 		if ( -1 == getline (&class_line, &class_line_size, pfile) ) {
-			printf ("RandomForestClassifer::train_on_file() : wrong traing file\
+			printf ("RandomForestClassifier::train_on_file() : wrong traing file\
 				read line %d\n", count_line);
 			break;
 		}
@@ -147,14 +147,14 @@ void RandomForestClassifer::train_on_file(const char* training_file)
 	delete features_line;
 	delete class_line;
 
-	printf("RandomForestClassifer::train_on_file() finished training !\n");
+	printf("RandomForestClassifier::train_on_file() finished training !\n");
 }
 
-void RandomForestClassifer::save_model(const char* model_file)
+void RandomForestClassifier::save_model(const char* model_file)
 {
 	FILE * pfile = fopen(model_file, "wb");
 	if ( NULL == pfile ) { 
-		printf ("RandomForestClassifer::save_model() no such directort %s\n", model_file);
+		printf ("RandomForestClassifier::save_model() no such directort %s\n", model_file);
 		exit (1);
 	}
   int temp[2];
@@ -165,15 +165,15 @@ void RandomForestClassifer::save_model(const char* model_file)
   alglib::dfserialize (df, s_out);
   fwrite (s_out.c_str(), sizeof(char), s_out.size(), pfile);
 	fclose (pfile);
-	printf ("CRandomForestClassifer::save_model() : saved model successful !!\n");
+	printf ("CRandomForestClassifier::save_model() : saved model successful !!\n");
 }
 
-void RandomForestClassifer::load_model(const char* model_file)
+void RandomForestClassifier::load_model(const char* model_file)
 {
 	free_model();
 	FILE * pfile = fopen(model_file, "rb");
 	if ( NULL == pfile ) { 
-		printf ("RandomForestClassifer::load_model() error in opening %s\n", model_file);
+		printf ("RandomForestClassifier::load_model() error in opening %s\n", model_file);
 		exit(1);
 	}
 	// // char *pend = NULL;
@@ -184,7 +184,7 @@ void RandomForestClassifer::load_model(const char* model_file)
   rewind (pfile);
   buffer = (char*) malloc (sizeof(char)*length);
   if (buffer == NULL) {
-  	printf("RandomForestClassifer::load_model() : can't allocate memory for buffer\n");
+  	printf("RandomForestClassifier::load_model() : can't allocate memory for buffer\n");
   	exit (1);
   }
 
@@ -192,11 +192,11 @@ void RandomForestClassifer::load_model(const char* model_file)
 	if ( 0 != fread (temp, sizeof(int), 2, pfile) ) {
     features_num = temp[0];
     class_num = temp[1];
-		printf ("RandomForestClassifer::load_model() \
+		printf ("RandomForestClassifier::load_model() \
 			features_num = %d, class_num = %d\n", features_num, class_num);
 	}
 	else {
-		printf ("RandomForestClassifer::load_model() : wrong model file ---- error in \
+		printf ("RandomForestClassifier::load_model() : wrong model file ---- error in \
 			reading first line\n");
 		exit(1);
 	}
@@ -211,12 +211,12 @@ void RandomForestClassifer::load_model(const char* model_file)
 	is_free = false;
 	free (buffer);
 	fclose (pfile);
-	printf("RandomForestClassifer::load_model() :  load model successful !!\n");
+	printf("RandomForestClassifier::load_model() :  load model successful !!\n");
 }
 
-void RandomForestClassifer::predicted_category(const double* features, int& res)
+void RandomForestClassifier::predicted_category(const double* features, int& res)
 {
-	// printf("CRandomForestClassifer::predicted_category()\n");
+	// printf("CRandomForestClassifier::predicted_category()\n");
 	// for (int i = 0; i < features_num; ++i) {
 	// 	printf("%f ", features[i]);
 	// }
@@ -248,7 +248,7 @@ void RandomForestClassifer::predicted_category(const double* features, int& res)
 	delete yp;
 }
 
-void RandomForestClassifer::free_model()
+void RandomForestClassifier::free_model()
 {
 	if ( is_free ) {
 		printf("free model successful!\n");

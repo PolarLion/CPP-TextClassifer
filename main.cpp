@@ -62,7 +62,7 @@ void test_TC()
 
 void test_RFC()
 {
-  randomforestc::RandomForestClassifer* p = new randomforestc::RandomForestClassifer();
+  randomforestc::RandomForestClassifier* p = new randomforestc::RandomForestClassifier();
   p->train_on_file("io/train.txt");
   p->save_model("io/model.txt");
   p->free_model();
