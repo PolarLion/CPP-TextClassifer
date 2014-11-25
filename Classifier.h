@@ -5,6 +5,7 @@ namespace classifiertype{
   enum ClassifierType{
     Bayesian = 0,
     RandomForest, 
+    LogitRegression, 
     SVM,
     NeuralNetwork
   };
@@ -14,9 +15,9 @@ namespace classifiertype{
 class Classifier
 {
 protected:
-  int class_num;
-  int features_num;
-  int training_size;
+  long class_num;
+  long features_num;
+  long training_size;
   bool is_free;
 public:
   Classifier() : class_num (0), features_num(0), training_size(0), is_free(true) {}

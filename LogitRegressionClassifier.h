@@ -4,15 +4,13 @@
 #include "dataanalysis.h"
 #include <unordered_map>
 
-namespace randomforestc{
+namespace logitregressionc{
 
 
 class LogitRegressionClassifier:public Classifier 
 {
 private:
-  alglib::ae_int_t n_trees;
-  // randomforestc::Item *bayesiantable;
-  alglib::decisionforest df;
+  alglib::logitmodel lm;
 public:
   LogitRegressionClassifier ();
   LogitRegressionClassifier (const char* config_file);

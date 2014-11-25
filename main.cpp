@@ -16,6 +16,7 @@
 #include "TextClassifier.h"
 #include "BayesianTextClassifier.h"
 #include "RandomForestClassifier.h"
+#include "LogitRegressionClassifier.h"
 
 
 using namespace std;
@@ -36,6 +37,7 @@ void test_tc(int num);
 void fool_test();
 void test_Bayesizn();
 void test_RFC();
+void test_LRC();
 void test_TC();
 
 int main(int argc, char **argv)
@@ -46,6 +48,7 @@ int main(int argc, char **argv)
   int num = strtol (argv[1], &pend, 10);
   test_tc(num);
 
+  // test_LRC();
   // test_TC();
   // fool_test();
   // test_RFC();
@@ -55,10 +58,27 @@ int main(int argc, char **argv)
   return 0;
 }
 
-void test_TC()
+void test_LRC() 
 {
-  TextClassifier tc(4, codingtype::SeparaterType::GBK, classifiertype::ClassifierType::Bayesian);
+  logitregressionc::LogitRegressionClassifier * p = new logitregressionc::LogitRegressionClassifier();
+  printf("1\n");
+  p->train_on_file("io/train.txt");
+
+  printf("2\n");
+  p->save_model("io/model.txt");
+  p->free_model();
+  p->load_model("io/model.txt");
+  double d1[] = {0.9, 0.8, 0.1, 0.3};
+  double d2[] ={0.1, 0.2, 0.9, 0.9};
+  int c = 0;
+  p->predicted_category(d1, c);
+  printf ("predicted category is %d\n", c);
+  c = 0;
+  p->predicted_category(d2, c);
+  printf ("predicted category is %d\n", c);
+  delete p;
 }
+
 
 void test_RFC()
 {
@@ -105,7 +125,8 @@ void test_tc(int num)
 {
   const double ratio = 0.8;
   // TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::Bayesian, "");
-  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
+  // TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
+  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::LogitRegression, "");
   printf ("1\n");
   const string working_path = "io/";
   unordered_map<string, vector<string>> class_map;

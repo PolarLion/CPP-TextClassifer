@@ -2,6 +2,7 @@
 #include "TextClassifier.h"
 #include "BayesianTextClassifier.h"
 #include "RandomForestClassifier.h"
+#include "LogitRegressionClassifier.h"
 
 #include <cmath>
 #include <ctime>
@@ -76,6 +77,9 @@ TextClassifier::TextClassifier(
   }
   else if ( classifiertype::ClassifierType::RandomForest == classifier_type ) {
     classifier = new randomforestc::RandomForestClassifier();
+  }
+  else if ( classifiertype::ClassifierType::LogitRegression == classifier_type ) {
+    classifier = new logitregressionc::LogitRegressionClassifier();
   }
   else {
 
