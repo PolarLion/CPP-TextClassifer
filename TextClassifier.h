@@ -5,6 +5,7 @@
 #include <string>
 #include <algorithm>
 #include <unordered_map>
+#include "scanfile.h"
 
 #include "Classifier.h"
 #include "BayesianTextClassifier.h"
