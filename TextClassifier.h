@@ -5,11 +5,12 @@
 #include <string>
 #include <algorithm>
 #include <unordered_map>
-#include "scanfile.h"
+
 
 #include "Classifier.h"
-#include "BayesianTextClassifier.h"
+// #include "BayesianTextClassifier.h"
 #include "SingleCharacterSeparater.h"
+// #include "LogitRegressionClassifier.h"
 
 #define FEATURE_NUM 3500
 
@@ -63,7 +64,7 @@ public:
 	~TextClassifier();
 
 	void load_features();
-  void train();
+  // void train();
   bool load_data();
   const char* predicted_category(const char* data) const;
 
@@ -77,5 +78,12 @@ public:
 	// void prepare_training_file();
 	
 	// void add_classname(const std::string& classname);
+
+  bool add_training_set (const std::string& train_dir);
+
+  void train ();
+
+  bool batch_predict (const char* dir, const char* outfile);
+
 };
 

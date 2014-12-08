@@ -3,6 +3,7 @@
 #include "BayesianTextClassifier.h"
 #include "RandomForestClassifier.h"
 #include "LogitRegressionClassifier.h"
+#include "scanfile.h"
 
 #include <cmath>
 #include <ctime>
@@ -356,6 +357,45 @@ const char* TextClassifier::predicted_category(const char* data) const
 void TextClassifier::show_model()
 {
   classifier->show_model();
+}
+
+bool TextClassifier::add_training_set (const std::string& train_dir)
+{
+  std::vector<std::string> dirs;
+  get_dirs (train_dir, dirs);
+  for (std::vector<std::string>::iterator p = dirs.begin(); p != dirs.end(); ++p) {
+    add_classname (*p);
+    #ifdef __linux__
+    std::string sub_dir = train_dir + *p + "/";
+    #else 
+    std::string sub_dir = train_dir + *p + "\\";
+    #endif
+    std::vector<std::string> files;
+    get_files (sub_dir, files);
+    for (size_t i = 0; i < files.size(); ++i) {
+      if ( i % 10 == 0) {
+        printf ("%f\r", i / (float)files.size());
+      }
+      std::ifstream infile(sub_dir+files[i]);
+      if (infile.fail()) {
+        printf ("TextClassifier::add_training_set : error in opening %s\n", files[i].c_str());
+        continue;
+      }
+      infile.seekg(0, infile.end);
+      int length = infile.tellg();
+      infile.seekg(0, infile.beg);
+      char* buffer = new char[length+1];
+      if (NULL == buffer) {
+        printf ("TextClassifier::add_training_set() : can't allocate memory\n");
+        exit (1);
+      }
+      buffer[length] = 0;
+      infile.read (buffer, length);
+      add_train_data (*p, buffer);
+      delete buffer;
+      infile.close();
+    }
+  }
 }
 
 
