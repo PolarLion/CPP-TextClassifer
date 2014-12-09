@@ -83,7 +83,7 @@ public:
 
   void train ();
 
-  bool batch_predict (const char* dir, const char* outfile);
+  bool batch_predict (const std::string& dir, const std::string& outfile);
 
 };
 

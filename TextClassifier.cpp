@@ -411,6 +411,49 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
   return true;
 }
 
+bool TextClassifier::batch_predict (const std::string& dir, const std::string& outfilename)
+{
+  std::ofstream outfile (outfilename);
+  if (outfile.fail()) {
+    printf("TextClassifier::batch_predict() : error in opening %s\n", outfilename.c_str());
+    exit (1);
+  }
+  std::string line = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+  outfile.write (line.c_str(), line.size());
+  std::unordered_map<std::string, std::vector<std::string>> class_of_files;
+  std::vector<std::string> files;
+  get_files (dir, files);
+  for (std::vector<std::string>::iterator p = files.begin(); p != files.end(); ++p) {
+    std::ifstream infile (dir+(*p));
+    if (infile.fail()) {
+      printf("TextClassifier::batch_predict() : error in opening %s\n", (dir+(*p)).c_str());
+      exit (1);
+    }
+    infile.seekg(0, infile.end); 
+    long length = infile.tellg(); 
+    infile.seekg(0, infile.beg); 
+    char* buffer = new char[length+1]; 
+    if (NULL == buffer) { 
+      printf ("TextClassifier::add_training_set() : can't allocate memory\n");
+      exit (1);
+    }
+    buffer[length] = 0;
+    infile.read (buffer, length);
+    class_of_files [predicted_category (buffer)].push_back (*p);
+    delete buffer;
+    infile.close();
+  }
+
+  for (auto p = class_of_files.begin(); p != class_of_files.end(); ++p) {
+    outfile << "<class = \"" << p->first << "\">\n";
+    for (auto pp = (p->second).begin(); pp != (p->second).end(); ++pp) {
+      outfile << "  <file>" << *pp << "</file>\n";
+    }
+    outfile << "</class>\n";
+  }
+  outfile.close ();
+  return true;
+}
 
 
 
