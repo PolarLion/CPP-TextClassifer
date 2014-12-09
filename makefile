@@ -1,7 +1,7 @@
 CC=clang++
 CFLAGS=-c -O3 -Wall -std=c++11 
 LDFLAGS=
-SOURCES = SingleCharacterSeparater.cpp TextClassifier.cpp \
+SOURCES = SingleCharacterSeparater.cpp TextClassifier.cpp scanfile.cpp\
 	LogitRegressionClassifier.cpp RandomForestClassifier.cpp BayesianTextClassifier.cpp \
 	ap.cpp alglibinternal.cpp linalg.cpp statistics.cpp \
 	alglibmisc.cpp specialfunctions.cpp solvers.cpp optimization.cpp \

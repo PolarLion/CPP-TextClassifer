@@ -33,12 +33,12 @@ void keep_window_open()
 
 using std::ifstream;
 
-void test_tc(int num);
-void fool_test();
-void test_Bayesizn();
-void test_RFC();
-void test_LRC();
-void test_TC();
+void test_tc (int num);
+void fool_test ();
+void test_Bayesizn ();
+void test_RFC ();
+void test_LRC ();
+void test_TC (int num);
 
 int main(int argc, char **argv)
 {
@@ -46,10 +46,10 @@ int main(int argc, char **argv)
   char *pend = NULL;
   // printf("%s\n", argv[0]);
   int num = strtol (argv[1], &pend, 10);
-  test_tc(num);
+  // test_tc(num);
 
   // test_LRC();
-  // test_TC();
+  test_TC (num);
   // fool_test();
   // test_RFC();
   // keep_window_open();
@@ -57,6 +57,14 @@ int main(int argc, char **argv)
   // test_Bayesizn();
   return 0;
 }
+
+void test_TC (int num)
+{
+  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::LogitRegression, "");
+  string path = "../training_set/easy_train/";
+  tc->add_training_set (path);
+}
+
 
 void test_LRC() 
 {

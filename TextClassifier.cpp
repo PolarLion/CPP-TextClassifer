@@ -363,19 +363,24 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
 {
   std::vector<std::string> dirs;
   get_dirs (train_dir, dirs);
+
   for (std::vector<std::string>::iterator p = dirs.begin(); p != dirs.end(); ++p) {
     add_classname (*p);
+  }
+
+  for (std::vector<std::string>::iterator p = dirs.begin(); p != dirs.end(); ++p) {
     #ifdef __linux__
     std::string sub_dir = train_dir + *p + "/";
+    printf("%s ", sub_dir.c_str());
     #else 
     std::string sub_dir = train_dir + *p + "\\";
     #endif
     std::vector<std::string> files;
     get_files (sub_dir, files);
     for (size_t i = 0; i < files.size(); ++i) {
-      if ( i % 10 == 0) {
-        printf ("%f\r", i / (float)files.size());
-      }
+      // if ( i % 10 == 0) {
+        printf ("%d%%\r", (i * 100)/ files.size());
+      // }
       std::ifstream infile(sub_dir+files[i]);
       if (infile.fail()) {
         printf ("TextClassifier::add_training_set : error in opening %s\n", files[i].c_str());
@@ -395,6 +400,7 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
       delete buffer;
       infile.close();
     }
+    printf(" : %d\n", files.size());
   }
 }
 
