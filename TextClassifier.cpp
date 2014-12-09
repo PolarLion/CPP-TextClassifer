@@ -132,7 +132,7 @@ void TextClassifier::load_features()
       }
     }
   }
-  printf ("TextClassifier::load_features(): features num = %d, size of features = %d\n", features_num, i);
+  printf ("TextClassifier::load_features(): features num = %ld, size of features = %ld\n", features_num, i);
   infile.close();
 }
 
@@ -184,7 +184,7 @@ void TextClassifier::add_train_data(const std::string& classname, const std::str
     bag[s]++;
     count_word++;});
 
-  //printf ("%d, %d\n", bag.size(), count_word);
+  //printf ("%ld, %ld\n", bag.size(), count_word);
 
   std::ofstream outfile(training_file_path, std::ios::app);
   if ( outfile.fail() ) {
@@ -232,7 +232,7 @@ void TextClassifier::preprocessor()
     buffer = nullptr;
     return;
   }
-  sprintf(first_trainfile_line, "%d %d %d\n", count_training_set, features_num, count_classnum);
+  sprintf(first_trainfile_line, "%ld %ld %ld\n", count_training_set, features_num, count_classnum);
   outfile.write(first_trainfile_line, strlen(first_trainfile_line));
   outfile.write(buffer, length);
   outfile.close();
@@ -318,12 +318,12 @@ bool TextClassifier::load_classes()
     if (s1.size() > 0 && num > -1) {
       classname_int[s1] = num;
       int_classname[num] = s1;
-      // printf ("%s %d\n", s1.c_str(), num);
+      // printf ("%s %ld\n", s1.c_str(), num);
     }
   }
   infile.close();
   for (auto p = classname_int.begin(); p != classname_int.end(); ++p) {
-    printf ("%s %d\n", (p->first).c_str(), p->second);
+    printf ("%s %ld\n", (p->first).c_str(), p->second);
   }
   // printf("heeeeeeeeeeeeeeeeeeeeeeeeeee\n");
   return true;
@@ -371,20 +371,24 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
   for (std::vector<std::string>::iterator p = dirs.begin(); p != dirs.end(); ++p) {
     #ifdef __linux__
     std::string sub_dir = train_dir + *p + "/";
-    printf("%s ", sub_dir.c_str());
     #else 
     std::string sub_dir = train_dir + *p + "\\";
     #endif
     std::vector<std::string> files;
     get_files (sub_dir, files);
+    if (files.size() <= 0) {
+      printf ("TextClassifier::add_training_set : There's a empty class %s\n", sub_dir.c_str());
+      return false;
+    }
     for (size_t i = 0; i < files.size(); ++i) {
-      // if ( i % 10 == 0) {
-        printf ("%d%%\r", (i * 100)/ files.size());
-      // }
+      if ( (i+1) / 10 == 0 || (i+1) == files.size()) {
+        printf ("\rTextClassifier::add_training_set : processing %s %ld%% : %ld",
+         sub_dir.c_str(), ((i+1) * 100)/ files.size(), i);
+      }
       std::ifstream infile(sub_dir+files[i]);
       if (infile.fail()) {
         printf ("TextClassifier::add_training_set : error in opening %s\n", files[i].c_str());
-        continue;
+        exit (1);
       }
       infile.seekg(0, infile.end);
       int length = infile.tellg();
@@ -396,12 +400,13 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
       }
       buffer[length] = 0;
       infile.read (buffer, length);
-      add_train_data (*p, buffer);
+      // add_train_data (*p, buffer);
       delete buffer;
       infile.close();
     }
-    printf(" : %d\n", files.size());
+    // printf(" : %ld\n", files.size());
   }
+  return true;
 }
 
 
