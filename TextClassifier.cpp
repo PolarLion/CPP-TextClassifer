@@ -118,7 +118,7 @@ void TextClassifier::load_features()
     printf("TextClassifier::load_features(): error open %s\n", gbk_features_file_path);
     return;
   }
-  int i = 0;
+  long i = 0;
   while (!infile.eof() && i < features_num) {
     std::string line;
     std::getline(infile, line);
@@ -209,7 +209,7 @@ void TextClassifier::add_train_data(const std::string& classname, const std::str
 
 void TextClassifier::preprocessor()
 {
-  std::ifstream infile(training_file_path);
+  std::ifstream infile (training_file_path);
   if (infile.fail()) {
     printf("TextClassifier::preprocessor: error in opening train.txt\n");
     return;
@@ -232,13 +232,13 @@ void TextClassifier::preprocessor()
     buffer = nullptr;
     return;
   }
-  sprintf(first_trainfile_line, "%ld %ld %ld\n", count_training_set, features_num, count_classnum);
+  sprintf(first_trainfile_line, "%ld %d %d\n", count_training_set, features_num, count_classnum);
   outfile.write(first_trainfile_line, strlen(first_trainfile_line));
   outfile.write(buffer, length);
   outfile.close();
-  printf("finish making train.txt\n");
-  printf("finish free memory\n");
-  printf("clear training set\n");
+  printf("TextClassifier::preprocessor() : finish making train.txt\n");
+  // printf("TextClassifier::preprocessor() : finish free memory\n");
+  // printf("TextClassifier::preprocessor() : clear training set\n");
   save_classes();
   if (nullptr != buffer) {
     delete buffer;
@@ -261,7 +261,7 @@ void TextClassifier::save_classes() const
   std::for_each(classname_int.begin(), classname_int.end(), 
     [&outfile](std::pair<std::string, int> p){ outfile << p.first << " " << p.second << std::endl;});
   outfile.close();
-  printf("save classes successed\n");
+  printf("TextClassifier::save_classes() : save classes successed\n");
 }
 
 void TextClassifier::add_classname(const std::string& classname)
@@ -322,9 +322,9 @@ bool TextClassifier::load_classes()
     }
   }
   infile.close();
-  for (auto p = classname_int.begin(); p != classname_int.end(); ++p) {
-    printf ("%s %ld\n", (p->first).c_str(), p->second);
-  }
+  // for (auto p = classname_int.begin(); p != classname_int.end(); ++p) {
+  //   printf ("%s %ld\n", (p->first).c_str(), p->second);
+  // }
   // printf("heeeeeeeeeeeeeeeeeeeeeeeeeee\n");
   return true;
 }
@@ -377,37 +377,40 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
     std::vector<std::string> files;
     get_files (sub_dir, files);
     if (files.size() <= 0) {
-      printf ("TextClassifier::add_training_set : There's a empty class %s\n", sub_dir.c_str());
+      printf ("TextClassifier::add_training_set() : There's a empty class %s\n", sub_dir.c_str());
       return false;
     }
+
     for (size_t i = 0; i < files.size(); ++i) {
       if ( (i+1) / 10 == 0 || (i+1) == files.size()) {
-        printf ("\rTextClassifier::add_training_set : processing %s %ld%% : %ld",
+        printf ("\rTextClassifier::add_training_set() : processing %s %ld%% : %ld",
          sub_dir.c_str(), ((i+1) * 100)/ files.size(), i);
       }
       std::ifstream infile(sub_dir+files[i]);
       if (infile.fail()) {
-        printf ("TextClassifier::add_training_set : error in opening %s\n", files[i].c_str());
+        printf ("TextClassifier::add_training_set() : error in opening %s\n", files[i].c_str());
         exit (1);
-      }
-      infile.seekg(0, infile.end);
-      int length = infile.tellg();
-      infile.seekg(0, infile.beg);
-      char* buffer = new char[length+1];
-      if (NULL == buffer) {
+      } 
+      infile.seekg(0, infile.end); 
+      int length = infile.tellg(); 
+      infile.seekg(0, infile.beg); 
+      char* buffer = new char[length+1]; 
+      if (NULL == buffer) { 
         printf ("TextClassifier::add_training_set() : can't allocate memory\n");
         exit (1);
       }
       buffer[length] = 0;
       infile.read (buffer, length);
-      // add_train_data (*p, buffer);
+      add_train_data (*p, buffer);
       delete buffer;
       infile.close();
     }
+    printf("\n");
     // printf(" : %ld\n", files.size());
   }
   return true;
 }
+
 
 
 
