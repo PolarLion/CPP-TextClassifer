@@ -55,7 +55,7 @@ void RandomForestClassifier::train_on_file(const char* training_file)
 		features_num = strtol (pend, &pend, 10);
 		class_num = strtol (pend, NULL, 10);
 		printf ("RandomForestClassifier::train_on_file() :\
-			training_size = %d, features_num = %d, class_num = %d\n", training_size, features_num, class_num);
+			training_size = %ld, features_num = %ld, class_num = %ld\n", training_size, features_num, class_num);
 		is_free = false;
 	}
 	else {
@@ -84,7 +84,6 @@ void RandomForestClassifier::train_on_file(const char* training_file)
 	printf("RandomForestClassifier::train_on_file() : start training training file\n");
 	while ( -1 != getline (&features_line, &features_line_size, pfile)
 	 	&& count_line < training_size * 2 + 1) {
-		// printf("features_line %s\n", features_line);
 		count_line++;
 		if ( -1 == getline (&class_line, &class_line_size, pfile) ) {
 			printf ("RandomForestClassifier::train_on_file() : wrong traing file\
@@ -121,14 +120,6 @@ void RandomForestClassifier::train_on_file(const char* training_file)
 	}
 
 	xy.setcontent (training_size, features_num+1, alldata);
-
-	// for (int i = 0; i < training_size; ++i) {
-	// 	for (int j = 0; j < features_num+1; ++j) {
-	// 		/* code */
-	// 		printf("%f ", xy[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
 
 	alglib::dfbuildrandomdecisionforest(
     xy, //real_2d_array xy,
@@ -193,7 +184,7 @@ void RandomForestClassifier::load_model(const char* model_file)
     features_num = temp[0];
     class_num = temp[1];
 		printf ("RandomForestClassifier::load_model() \
-			features_num = %d, class_num = %d\n", features_num, class_num);
+			features_num = %ld, class_num = %ld\n", features_num, class_num);
 	}
 	else {
 		printf ("RandomForestClassifier::load_model() : wrong model file ---- error in \
@@ -216,22 +207,10 @@ void RandomForestClassifier::load_model(const char* model_file)
 
 void RandomForestClassifier::predicted_category(const double* features, int& res)
 {
-	// printf("RandomForestClassifier::predicted_category()\n");
-	// for (int i = 0; i < features_num; ++i) {
-	// 	printf("%f ", features[i]);
-	// }
-	// printf("\n");
 	alglib::real_1d_array x, y;
 	double *yp = new double[class_num];
-	// for (int i = 0; i < class_num; ++i) {
-	// 	yp[i] = 0.0;
-	// }
 	y.setcontent (class_num, yp);
 	x.setcontent (features_num, features);
-	// for (int i = 0; i < features_num; ++i) {
-	// 	printf("%f ", x[i]);
-	// }
-	// printf("\n");
 	alglib::dfprocess ( df,/*decisionforest*/ x,/*real_1d_array*/ y/*real_1d_array&*/ );
 	// printf("x.length = %d, y.length = %d\n", x.length(), y.length());
 	res = 0;
@@ -243,8 +222,6 @@ void RandomForestClassifier::predicted_category(const double* features, int& res
 			res = i;
 		}
 	}
-
-	// printf ("res : %d\n", res);
 	delete yp;
 }
 

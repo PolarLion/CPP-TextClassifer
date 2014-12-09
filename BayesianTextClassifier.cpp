@@ -22,8 +22,8 @@ BayesianTextClassifier::~BayesianTextClassifier()
 
 void BayesianTextClassifier::show_bayesiantable() 
 {
-  for ( int i = 0; i < features_num; ++i ) {
-    printf("%d : \n", i);
+  for ( long i = 0; i < features_num; ++i ) {
+    printf("%ld : \n", i);
     for ( int j = 0; j < class_num; ++j) {
       printf("%f  ", bayesiantable[i].v[j]);
     }
@@ -75,10 +75,10 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
     free (first_line);
     if ( training_size > 0 && features_num > 0 && class_num > 0 ) {
       printf ("BayesianTC::train_on_file() :\
-        training_size = %d, features_num = %d, class_num = %d\n", training_size, features_num, class_num);
+        training_size = %ld, features_num = %ld, class_num = %ld\n", training_size, features_num, class_num);
     } else {
       printf ("BayesianTC::train_on_file() : error there is a zero in :\
-        training_size = %d, features_num = %d, class_num = %d\n", training_size, features_num, class_num);
+        training_size = %ld, features_num = %ld, class_num = %ld\n", training_size, features_num, class_num);
       exit (1);
     }
 		init_bayesiantable(features_num, class_num);
@@ -204,7 +204,7 @@ void BayesianTextClassifier::load_model(const char* model_file)
     features_num = temp[0];
     class_num = temp[1];
 		printf ("BayesianTC::load_model() \
-			features_num = %d, class_num = %d\n", features_num, class_num);
+			features_num = %ld, class_num = %ld\n", features_num, class_num);
 		if ( !init_bayesiantable(features_num, class_num) ) {
       printf ("BayesianTC::load_model() : init_bayesiantable() error\n");
       exit (1);

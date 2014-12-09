@@ -25,7 +25,7 @@ private:
   const char* classifier_config_file;
 
   std::string features[FEATURE_NUM];
-	int count_classnum;
+	long count_classnum;
 	long count_training_set;
 	bool prepare_cts;
 

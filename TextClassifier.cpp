@@ -232,7 +232,7 @@ void TextClassifier::preprocessor()
     buffer = nullptr;
     return;
   }
-  sprintf(first_trainfile_line, "%ld %d %d\n", count_training_set, features_num, count_classnum);
+  sprintf(first_trainfile_line, "%ld %ld %ld\n", count_training_set, features_num, count_classnum);
   outfile.write(first_trainfile_line, strlen(first_trainfile_line));
   outfile.write(buffer, length);
   outfile.close();

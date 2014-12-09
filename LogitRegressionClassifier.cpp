@@ -76,7 +76,7 @@ void LogitRegressionClassifier::train_on_file(const char* training_file)
 		exit (1);
 	}
 
-	int count_line = 1;
+	long count_line = 1;
 	int current_index = 0;
 	printf("LogitRegressionClassifier::train_on_file() : start training training file\n");
 	while ( -1 != getline (&features_line, &features_line_size, pfile)
