@@ -34,7 +34,7 @@ void RandomForestClassifier::init_model(const char* config_file)
 
 void RandomForestClassifier::train_on_file(const char* training_file)
 {
-	printf("CRandomForestClassifier::train_on_file() : start reading training file\n");
+	printf("RandomForestClassifier::train_on_file() : start reading training file\n");
 	free_model();
 	alglib::real_2d_array xy;
 	alglib::dfreport dfrep;
@@ -165,7 +165,7 @@ void RandomForestClassifier::save_model(const char* model_file)
   alglib::dfserialize (df, s_out);
   fwrite (s_out.c_str(), sizeof(char), s_out.size(), pfile);
 	fclose (pfile);
-	printf ("CRandomForestClassifier::save_model() : saved model successful !!\n");
+	printf ("RandomForestClassifier::save_model() : saved model successful !!\n");
 }
 
 void RandomForestClassifier::load_model(const char* model_file)
@@ -216,7 +216,7 @@ void RandomForestClassifier::load_model(const char* model_file)
 
 void RandomForestClassifier::predicted_category(const double* features, int& res)
 {
-	// printf("CRandomForestClassifier::predicted_category()\n");
+	// printf("RandomForestClassifier::predicted_category()\n");
 	// for (int i = 0; i < features_num; ++i) {
 	// 	printf("%f ", features[i]);
 	// }
