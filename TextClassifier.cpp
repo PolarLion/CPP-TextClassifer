@@ -6,18 +6,19 @@
 #include "scanfile.h"
 
 #include <cmath>
-#include <ctime>
 #include <string>
 #include <fstream>
 #include <unordered_set>
 #include <unordered_map>
-#include <chrono>
 #include <cstdio>
 #include <stdlib.h>
 #include <sstream>
 #include <string.h>
 #include <algorithm>
 #include <vector>
+#include <ctime>
+#include <chrono>
+#include <ratio>
 
 
 #ifdef __linux__
@@ -413,18 +414,25 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
 
 void TextClassifier::batch_predict (const std::string& dir, const std::string& outfilename)
 {
+  using namespace std::chrono;
+
   std::ofstream outfile (outfilename);
   if (outfile.fail()) {
     printf("TextClassifier::batch_predict() : error in opening %s\n", outfilename.c_str());
     exit (1);
   }
-  std::string line = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-  outfile.write (line.c_str(), line.size());
+  system_clock::time_point start_time = system_clock::now();
+  std::time_t tt = system_clock::to_time_t (start_time);
+  outfile << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+  outfile << "<start_time>\n  " << std::string (ctime (&tt)) << "</start_time>\n\n";
+  // outfile.write (line.c_str(), line.size());
   std::unordered_map<std::string, std::vector<std::string>> class_of_files;
   std::vector<std::string> files;
   get_files (dir, files);
+  size_t count_files = 0;
   for (std::vector<std::string>::iterator p = files.begin(); p != files.end(); ++p) {
     std::ifstream infile (dir+(*p));
+    ++count_files;
     if (infile.fail()) {
       printf("TextClassifier::batch_predict() : error in opening %s\n", (dir+(*p)).c_str());
       exit (1);
@@ -449,72 +457,19 @@ void TextClassifier::batch_predict (const std::string& dir, const std::string& o
     for (auto pp = (p->second).begin(); pp != (p->second).end(); ++pp) {
       outfile << "  <file>" << *pp << "</file>\n";
     }
-    outfile << "</class>\n";
+    outfile << "</class>\n\n";
   }
+  system_clock::time_point end_time = system_clock::now();
+  tt = system_clock::to_time_t (end_time);
+  outfile << "<end_time>\n  " << std::string (ctime (&tt)) << "</end_time>\n\n";
+  // system_clock::time_point past_time = end_time - start_time;
+  // tt = system_clock::to_time_t (past_time);
+  outfile << "<processing_speed measurement = \"doc/s\">\n  ";
+  outfile << (double) count_files * 1E3 / duration_cast<milliseconds> (end_time-start_time).count() ;
+  outfile << "\n</processing_speed>\n\n";
+  //hours,minutes,seconds,milliseconds,microseconds,nanoseconds
   outfile.close ();
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void TextClassifier::add_train_data(const char* classname, char *data)
-// {
-//   // if ( !prepare_cts) {
-//   //   prepare_classname_to_string();
-//   // }
-//   std::unordered_map<std::string, int> bag;
-
-//   int count_word = 0;
-  
-//   std::ofstream outfile(training_file_path, std::ios::app);
-//   if ( outfile.fail() ) {
-//     printf("TextClassifier::add_train_data(): error in opening %strain.txt\n", training_file_path);
-//     outfile.close();
-//     return;
-//   }
-//   const char *dropchar = " \t.,!?;-+";
-//   char* temp = NULL;
-//   char* t2 = NULL;
-//   temp = strtok_r(data, dropchar, &t2);
-//   while ( NULL != temp ) {
-//     bag[temp]++;
-//     ++count_word;
-//     temp = strtok_r(NULL, dropchar, &t2);
-//   }
-
-//   // for (auto p = bag.begin(); p != bag.end(); ++p) {
-//   //   std::cout << p->first << " " << p->second << std::endl;
-//   // }
-
-//   for (int i = 0; i < features_num; ++i) {
-//     std::unordered_map<std::string, int>::iterator p = bag.find(features[i]);
-//     if ( p != bag.end()) {
-//       outfile << (double)p->second / count_word << " ";
-//       std::cout << (double)p->second / count_word << " ";
-//     }
-//     else {
-//       outfile << 0 << " ";
-//       std::cout << 0 << " ";
-//     }
-//   }
-
-//   // outfile << std::endl << class_to_string_map[classname_to_int(classname)] << std::endl;
-//   count_training_set++;
-//   outfile.close();
-// }
