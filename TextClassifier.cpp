@@ -92,7 +92,7 @@ TextClassifier::TextClassifier(
   load_features();
   std::ofstream outfile(training_file_path);
   if ( outfile.fail() ) {
-    printf("TextClassifier::TextClassifier(): error in opening &s\n", training_file_path);
+    printf("TextClassifier::TextClassifier(): error in opening %s\n", training_file_path);
   }
   outfile.close();
 }
@@ -188,7 +188,7 @@ void TextClassifier::add_train_data(const std::string& classname, const std::str
 
   std::ofstream outfile(training_file_path, std::ios::app);
   if ( outfile.fail() ) {
-    printf("TextClassifier::add_train_data: error in opening &s\n", training_file_path);
+    printf("TextClassifier::add_train_data: error in opening %s\n", training_file_path);
     return;
   }
 
@@ -411,7 +411,7 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
   return true;
 }
 
-bool TextClassifier::batch_predict (const std::string& dir, const std::string& outfilename)
+void TextClassifier::batch_predict (const std::string& dir, const std::string& outfilename)
 {
   std::ofstream outfile (outfilename);
   if (outfile.fail()) {
@@ -445,15 +445,16 @@ bool TextClassifier::batch_predict (const std::string& dir, const std::string& o
   }
 
   for (auto p = class_of_files.begin(); p != class_of_files.end(); ++p) {
-    outfile << "<class = \"" << p->first << "\">\n";
+    outfile << "<class name = \"" << p->first << "\">\n";
     for (auto pp = (p->second).begin(); pp != (p->second).end(); ++pp) {
       outfile << "  <file>" << *pp << "</file>\n";
     }
     outfile << "</class>\n";
   }
   outfile.close ();
-  return true;
 }
+
+
 
 
 
@@ -483,7 +484,7 @@ bool TextClassifier::batch_predict (const std::string& dir, const std::string& o
   
 //   std::ofstream outfile(training_file_path, std::ios::app);
 //   if ( outfile.fail() ) {
-//     printf("TextClassifier::add_train_data(): error in opening &strain.txt\n", training_file_path);
+//     printf("TextClassifier::add_train_data(): error in opening %strain.txt\n", training_file_path);
 //     outfile.close();
 //     return;
 //   }

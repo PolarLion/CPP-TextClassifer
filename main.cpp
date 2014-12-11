@@ -60,9 +60,15 @@ int main(int argc, char **argv)
 
 void test_TC (int num)
 {
-  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::LogitRegression, "");
-  string path = "../training_set/easy_train/";
-  tc->add_training_set (path);
+  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
+  string trpath = "../training_set/easy_train/";
+  string tepath = "../testing_set/easy_test/";
+  tc->add_training_set (trpath);
+  tc->preprocessor ();
+  tc->train ();
+  tc->load_data ();
+  tc->batch_predict (tepath, "io/result.xml");
+  delete tc;
 }
 
 
