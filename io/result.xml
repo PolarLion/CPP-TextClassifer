@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<start_time>
+  Thu Dec 11 13:28:16 2014
+</start_time>
+<class name = "交通214">
+  <file>交通214427.TXT</file>
+  <file>交通214414.TXT</file>
+  <file>交通214423.TXT</file>
+  <file>交通214410.TXT</file>
+  <file>交通214426.TXT</file>
+  <file>交通214424.TXT</file>
+  <file>交通214415.TXT</file>
+  <file>交通214416.TXT</file>
+  <file>交通214420.TXT</file>
+  <file>交通214411.TXT</file>
+  <file>交通214422.TXT</file>
+  <file>交通214419.TXT</file>
+  <file>交通214412.TXT</file>
+  <file>交通214428.TXT</file>
+  <file>交通214418.TXT</file>
+</class>
+<class name = "体育450">
+  <file>体育4501014.txt</file>
+  <file>体育4501026.txt</file>
+  <file>体育4501011.txt</file>
+  <file>体育4501012.txt</file>
+  <file>体育4501024.txt</file>
+  <file>体育4501028.txt</file>
+  <file>体育4501018.txt</file>
+  <file>体育4501027.txt</file>
+  <file>体育4501016.txt</file>
+  <file>体育4501023.txt</file>
+  <file>体育4501022.txt</file>
+  <file>体育4501010.txt</file>
+  <file>体育4501020.txt</file>
+  <file>体育4501015.txt</file>
+  <file>体育4501019.txt</file>
+</class>
+<class name = "医药204">
+  <file>医药204714.TXT</file>
+  <file>医药204712.TXT</file>
+  <file>医药204716.TXT</file>
+  <file>医药204727.TXT</file>
+  <file>医药204723.TXT</file>
+  <file>医药204726.TXT</file>
+  <file>医药204719.TXT</file>
+  <file>医药204724.TXT</file>
+  <file>医药204715.TXT</file>
+  <file>医药204718.TXT</file>
+  <file>医药204711.TXT</file>
+  <file>医药204710.TXT</file>
+  <file>医药204728.TXT</file>
+  <file>医药204720.TXT</file>
+  <file>医药204722.TXT</file>
+</class>
+<class name = "政治505">
+  <file>政治505918.TXT</file>
+  <file>政治505922.TXT</file>
+  <file>政治505919.TXT</file>
+  <file>政治5059108.TXT</file>
+  <file>政治5059105.TXT</file>
+  <file>政治505917.TXT</file>
+  <file>政治505923.TXT</file>
+  <file>政治5059110.TXT</file>
+  <file>政治5059100.TXT</file>
+  <file>政治5059106.TXT</file>
+  <file>政治505921.TXT</file>
+  <file>政治5059101.TXT</file>
+  <file>政治5059102.TXT</file>
+  <file>政治5059109.TXT</file>
+  <file>政治5059104.TXT</file>
+</class>
+<end_time>
+  Thu Dec 11 13:28:16 2014
+</end_time>
+<processing_speed measurement = "doc/s">
+  5454.55
+</processing_speed>

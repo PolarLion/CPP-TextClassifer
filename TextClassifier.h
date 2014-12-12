@@ -85,5 +85,7 @@ public:
 
   void batch_predict (const std::string& dir, const std::string& outfile);
 
+  
+
 };
 
