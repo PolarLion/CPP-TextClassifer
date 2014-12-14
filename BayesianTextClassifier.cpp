@@ -132,7 +132,7 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
     // count_class[class_index]+;
 		int j = 0;
 		//get every feature value
-    double d = strtol (features_line, &pend, 10);
+    int d = strtol (features_line, &pend, 10);
     count_class[class_index] += d;
 		bayesiantable[j].v[class_index] += d;
 		for (j = 1; j < features_num-1; ++j) {
