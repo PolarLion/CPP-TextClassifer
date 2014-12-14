@@ -5,7 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
+#include <fstream>
 
+#define FIRST_LINE_SIZE 1000000
 using namespace randomforestc;
 
 RandomForestClassifier::RandomForestClassifier()
@@ -40,17 +42,17 @@ void RandomForestClassifier::train_on_file(const char* training_file)
 	alglib::dfreport dfrep;
 	alglib::ae_int_t info;
 	
-	FILE * pfile = fopen(training_file, "r");
-	if ( NULL == pfile ) { 
-		printf ("RandomForestClassifier::train_on_file() error in opening %s\n", training_file);
+	std::ifstream infile (training_file);
+	if (infile.fail()) {
+		printf ("BayesianTC::train_on_file() error in opening %s\n", training_file);
 		exit(1);
 	}
 
 	char* pend = NULL;
 
 	//get first line : trainging size, features number, class number
-	char first_line[200] = {0};
-	if ( NULL != fgets (first_line, 200, pfile) ) {
+	char first_line[FIRST_LINE_SIZE] = {0};
+	if ( !(infile.getline (first_line, FIRST_LINE_SIZE)).fail() ) {
 		training_size = strtol (first_line, &pend, 10);
 		features_num = strtol (pend, &pend, 10);
 		class_num = strtol (pend, NULL, 10);
@@ -82,10 +84,10 @@ void RandomForestClassifier::train_on_file(const char* training_file)
 	int count_line = 1;
 	int current_index = 0;
 	printf("RandomForestClassifier::train_on_file() : start training training file\n");
-	while ( -1 != getline (&features_line, &features_line_size, pfile)
+	while ( !(infile.getline (features_line, FIRST_LINE_SIZE)).fail()
 	 	&& count_line < training_size * 2 + 1) {
 		count_line++;
-		if ( -1 == getline (&class_line, &class_line_size, pfile) ) {
+		if (  (infile.getline (class_line, FIRST_LINE_SIZE)).fail() ) {
 			printf ("RandomForestClassifier::train_on_file() : wrong traing file\
 				read line %d\n", count_line);
 			break;
@@ -134,7 +136,7 @@ void RandomForestClassifier::train_on_file(const char* training_file)
   );
 
 	is_free = false;
-	fclose(pfile);
+	// fclose(pfile);
 	delete features_line;
 	delete class_line;
 

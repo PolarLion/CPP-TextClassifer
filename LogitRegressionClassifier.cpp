@@ -3,7 +3,10 @@
 #include <string>
 #include <stdio.h>
 #include <string.h>
+#include <fstream>
 #include <cmath>
+
+#define FIRST_LINE_SIZE 1000000
 
 using namespace logitregressionc;
 
@@ -37,17 +40,17 @@ void LogitRegressionClassifier::train_on_file(const char* training_file)
 	alglib::mnlreport lmrep;
 	alglib::ae_int_t info;
 	
-	FILE * pfile = fopen(training_file, "r");
-	if ( NULL == pfile ) { 
-		printf ("LogitRegressionClassifier::train_on_file() error in opening %s\n", training_file);
+	std::ifstream infile (training_file);
+	if (infile.fail()) {
+		printf ("BayesianTC::train_on_file() error in opening %s\n", training_file);
 		exit(1);
 	}
 
 	char* pend = NULL;
 
 	//get first line : trainging size, features number, class number
-	char first_line[200] = {0};
-	if ( NULL != fgets (first_line, 200, pfile) ) {
+	char first_line[FIRST_LINE_SIZE] = {0};
+	if ( !(infile.getline (first_line, FIRST_LINE_SIZE)).fail()) {
 		training_size = strtol (first_line, &pend, 10);
 		features_num = strtol (pend, &pend, 10);
 		class_num = strtol (pend, NULL, 10);
@@ -67,23 +70,19 @@ void LogitRegressionClassifier::train_on_file(const char* training_file)
 		exit (1);
 	}
 	// //edit the bayesiantable 
-	size_t features_line_size = features_num * 10+ 1;
-	size_t class_line_size = class_num * 2 + 1;
-	char *features_line = new char[features_line_size];
-	char *class_line = new char[class_line_size];
-	if ( NULL == features_line || NULL == class_line ) {
-		printf ("LogitRegressionClassifier::train_on_file() error allocate memory for char[]\n");
-		exit (1);
-	}
+	// size_t features_line_size = features_num * 10+ 1;
+	// size_t class_line_size = class_num * 2 + 1;
+	char features_line[FIRST_LINE_SIZE] = {0};
+	char class_line[FIRST_LINE_SIZE] = {0};
 
 	long count_line = 1;
 	int current_index = 0;
 	printf("LogitRegressionClassifier::train_on_file() : start training training file\n");
-	while ( -1 != getline (&features_line, &features_line_size, pfile)
+	while ( !(infile.getline (features_line, FIRST_LINE_SIZE)).fail()
 	 	&& count_line < training_size * 2 + 1) {
 		// printf("features_line %s\n", features_line);
 		count_line++;
-		if ( -1 == getline (&class_line, &class_line_size, pfile) ) {
+		if ( (infile.getline (class_line, FIRST_LINE_SIZE)).fail() ) {
 			printf ("LogitRegressionClassifier::train_on_file() : wrong traing file\
 				read line %ld\n", count_line);
 			break;
@@ -147,9 +146,9 @@ void LogitRegressionClassifier::train_on_file(const char* training_file)
   	exit (1);
   }
 	is_free = false;
-	fclose(pfile);
-	delete features_line;
-	delete class_line;
+	// fclose(pfile);
+	// delete features_line;
+	// delete class_line;
 	printf("LogitRegressionClassifier::train_on_file() finished training !\n");
 }
 

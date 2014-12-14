@@ -3,9 +3,10 @@
 #include <stdlib.h> 
 #include <string.h>
 #include <cmath>
+#include <fstream>
 
 
-#define FIRST_LINE_SIZE 1000
+#define FIRST_LINE_SIZE 1000000
 
 using namespace bayesianc;
 
@@ -57,22 +58,24 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
 {
 	printf("BayesianTC::train_on_file() : start reading training file\n");
 	free_model();
-	FILE * pfile = fopen(training_file, "r");
-	if ( NULL == pfile ) { 
+	std::ifstream infile (training_file);
+	if (infile.fail()) {
 		printf ("BayesianTC::train_on_file() error in opening %s\n", training_file);
 		exit(1);
 	}
 
+	// FILE * pfile = fopen(training_file, "r");
+
 	char* pend = NULL;
 	//get first line : trainging size, features number, class number
 	//and init the bayesiantable
-	char *first_line = NULL;
-  size_t first_line_size = 0;
-	if ( -1 != getline(&first_line, &first_line_size, pfile) ) {
+	char first_line[FIRST_LINE_SIZE];
+  // size_t first_line_size = 0;
+  if ( !(infile.getline (first_line, FIRST_LINE_SIZE)).fail()) {
 		training_size = strtol (first_line, &pend, 10);
 		features_num = strtol (pend, &pend, 10);
 		class_num = strtol (pend, NULL, 10);
-    free (first_line);
+    // free (first_line);
     if ( training_size > 0 && features_num > 0 && class_num > 0 ) {
       printf ("BayesianTC::train_on_file() :\
         training_size = %ld, features_num = %ld, class_num = %ld\n", training_size, features_num, class_num);
@@ -90,10 +93,10 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
 	}
 
 	//edit the bayesiantable 
-	size_t features_line_size = 0;
-	size_t class_line_size = 0;
-	char *features_line = NULL;
-	char *class_line = NULL;
+	// size_t features_line_size = 0;
+	// size_t class_line_size = 0;
+	char features_line[FIRST_LINE_SIZE];
+	char class_line[FIRST_LINE_SIZE];
   int *count_class = new int[class_num];
 	if ( NULL == count_class) {
 		printf ("BayesianTC::train_on_file() error allocate memory for count_class array\n");
@@ -103,10 +106,10 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
 
 	printf("BayesianTC::train_on_file() : start training training file\n");
 	int count_line = 1;
-	while ( -1 != getline (&features_line, &features_line_size, pfile)
+	while ( !(infile.getline (features_line, FIRST_LINE_SIZE)).fail()
 	 	&& count_line < training_size * 2 + 1) {
 		count_line++;
-		if ( -1 == getline (&class_line, &class_line_size, pfile) ) {
+		if ( (infile.getline (class_line, FIRST_LINE_SIZE)).fail() ){
 			printf ("BayesianTC::train_on_file() : wrong traing file\
 				read line %d\n", count_line);
 			break;
@@ -142,8 +145,8 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
     count_class[class_index] += d;
 	}
 
-  free (features_line);
-  free (class_line);
+  // free (features_line);
+  // free (class_line);
   // show_bayesiantable();
 	//p(ti|ci) = (1 + tf(ti, ci)) / (features size + sum of tf(tj, ci));
 	double *denominator = new double[class_num];
@@ -166,7 +169,7 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
 		}
 	}
 	is_free = false;
-	fclose(pfile);
+	// fclose(pfile);
 	delete denominator;
   delete count_class;
 	printf("BayesianTC::train_on_file() finished training !\n");
