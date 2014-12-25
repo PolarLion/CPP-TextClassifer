@@ -471,5 +471,138 @@ void TextClassifier::batch_predict (const std::string& dir, const std::string& o
   outfile.close ();
 }
 
+bool TextClassifier::auto_test (const std::string& train_dir, const std::string& resfile, const double ratio)
+{
+  using std::chrono::system_clock;
 
+  const std::string working_path = "io/";
+  std::unordered_map<std::string, std::vector<std::string>> class_map;
+  // string train_dir = "../training_set/easy_train/";
+  // string train_dir = "../training_set/test_train/";
+
+  std::vector<std::string> dirs;
+  get_dirs (train_dir, dirs);
+  for (auto p = dirs.begin(); p != dirs.end(); ++p) {
+    add_classname (*p);  
+    std::string sub_path = train_dir + *p + "/";
+    std::vector<std::string> files;
+    get_files (sub_path, files);
+    class_map [*p] = files;
+    printf ("class %s has %ld files\n", sub_path.c_str (), (long)files.size());
+  }
+  // printf ("2\n");
+  dirs.clear();
+  for (auto p = class_map.begin(); p != class_map.end(); ++p) {
+    const int maxindex = p->second.size() * ratio;
+    for (int i = 0; i < maxindex; ++i) {
+      std::string spath = train_dir + p->first + "/" + p->second[i];
+      std::ifstream infile (spath);
+      if (infile.fail ()) {
+        printf ("no such file %s\n", p->second[i].c_str());
+        return false;
+      }
+      infile.seekg (0, infile.end);
+      int length = infile.tellg();
+      infile.seekg (0, infile.beg);
+      char* buffer = new char[length+1];
+      buffer [length] = 0;
+      infile.read (buffer, length);
+      // cout << buffer << endl;
+      add_train_data (p->first, buffer);
+      // ++count;
+      delete buffer;
+      infile.close();
+    }
+  }
+  // printf ("3\n");
+  preprocessor();
+  // printf ("4\n");
+  train();
+  // printf ("5\n");
+  // tc->save_model();
+  load_data();
+  // printf ("6\n");
+
+  //记录被标记为该类别的样本数（用于计算precision）
+  std::unordered_map<std::string, int> c_info1;
+  //记录被正确标注的样本数
+  std::unordered_map<std::string, int> c_info2;
+  std::unordered_map<std::string, double> recall;
+  int count_all_right = 0;
+  int count_all = 0;
+  for (auto p = class_map.begin(); p != class_map.end(); ++p) {
+     c_info2[p->first] = 0;
+  }
+
+  for (auto p = class_map.begin(); p != class_map.end(); ++p) {
+    int count_right = 0;
+    int count = 0;
+    const int min = p->second.size() * ratio;
+    for (int i = min; i < p->second.size(); ++i) {
+    // for (int i = 0; i < min; ++i) {
+      std::string spath = train_dir + p->first + "/" + p->second[i];
+      std::ifstream infile(spath);
+      if (infile.fail()) {
+        printf("no such file %s\n", p->second[i].c_str());
+        return false;
+      }
+      infile.seekg (0, infile.end);
+      int length = infile.tellg();
+      infile.seekg (0, infile.beg);
+      char* buffer = new char [length+1];
+      buffer [length] = 0;
+      infile.read (buffer, length);
+
+      std::string sc = predicted_category (buffer);
+      ++count;
+      ++count_all;
+      c_info1[sc]++;
+      //cout << p->first << endl;
+      if(p->first == sc) {
+        ++count_right;
+        ++count_all_right;
+      }
+      delete buffer;
+      infile.close ();
+    }
+    c_info2[p->first] = count_right;
+    std::cout << std::endl;
+    std::cout << p->first <<  " ： right number : " << count_right << std::endl;
+    //cout << "Recall Rate : " << count_right / (double)vf.size() << endl;
+    recall [p->first] = count_right / (double)count;
+  }
+  int all = 0;
+  std::cout << c_info1.size () << std::endl;
+  std::ofstream outfile (resfile, std::ios::app);
+  if (outfile.fail()) {
+      printf("open outifle error\n");
+      return false;
+  }
+  system_clock::time_point today = system_clock::now();
+  std::time_t tt = system_clock::to_time_t (today);
+  outfile << std::string(ctime(&tt)) << "features : \t" << features_num << std::endl;
+  outfile << "class name\t"<<"training set\t"<<"testing set\t"<<"precision\t"<<"recall rate\t"<<"F value" << std::endl;
+  for (auto p = c_info1.begin(); p != c_info1.end(); ++p) {
+      all += p->second;
+      const double precision = c_info2[p->first] / (double)p->second;
+      std::cout << "class " << p->first << " : \n";
+      std::cout << "precision : " << precision << std::endl;
+      std::cout << "recall rate : " << recall[p->first] << std::endl;
+      std::cout << "F : " << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
+      outfile << p->first << "\t" << int(class_map[p->first].size() * ratio) << "\t"
+    << (int) (class_map[p->first].size() * (1.0-ratio)) << "\t" << precision << "\t" << recall[p->first] << "\t"
+    << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
+  }
+  const double drecall = count_all_right / (double)count_all;
+  outfile << "total :\t" << drecall << std::endl << std::endl;
+  //const double precision = count_all_right / (double)all;
+  //cout << "total recall rate : " << drecall << endl;
+  //cout << "total precision : " << precision << endl;
+  //cout << "total F : " << 2 * precision * drecall /(precision + drecall) << endl;
+  std::cout << "total accuracy :\t" << drecall << std::endl;
+
+
+  // tc->show_model();
+  return true;
+}
 
