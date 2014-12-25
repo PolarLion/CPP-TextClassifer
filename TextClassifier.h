@@ -85,7 +85,7 @@ public:
 
   void batch_predict (const std::string& dir, const std::string& outfile);
 
-  void auto_test (const std::string& train_dir, const std::string& resfile, const double ratio);
+  bool auto_test (const std::string& train_dir, const std::string& resfile, const double ratio);
 
 };
 
