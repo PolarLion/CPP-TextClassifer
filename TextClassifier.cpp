@@ -475,11 +475,10 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
 {
   using std::chrono::system_clock;
 
-  const std::string working_path = "io/";
+  // const std::string working_path = "io/";
   std::unordered_map<std::string, std::vector<std::string>> class_map;
   // string train_dir = "../training_set/easy_train/";
   // string train_dir = "../training_set/test_train/";
-
   std::vector<std::string> dirs;
   get_dirs (train_dir, dirs);
   for (auto p = dirs.begin(); p != dirs.end(); ++p) {
@@ -491,7 +490,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     printf ("class %s has %ld files\n", sub_path.c_str (), (long)files.size());
   }
   // printf ("2\n");
-  dirs.clear();
+  dirs.clear ();
   for (auto p = class_map.begin(); p != class_map.end(); ++p) {
     const int maxindex = p->second.size() * ratio;
     for (int i = 0; i < maxindex; ++i) {
@@ -514,14 +513,10 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       infile.close();
     }
   }
-  // printf ("3\n");
+
   preprocessor();
-  // printf ("4\n");
   train();
-  // printf ("5\n");
-  // tc->save_model();
   load_data();
-  // printf ("6\n");
 
   //记录被标记为该类别的样本数（用于计算precision）
   std::unordered_map<std::string, int> c_info1;
@@ -552,7 +547,6 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       char* buffer = new char [length+1];
       buffer [length] = 0;
       infile.read (buffer, length);
-
       std::string sc = predicted_category (buffer);
       ++count;
       ++count_all;
