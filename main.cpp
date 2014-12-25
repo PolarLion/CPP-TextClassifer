@@ -39,17 +39,18 @@ void test_Bayesizn ();
 void test_RFC ();
 void test_LRC ();
 void test_TC (int num);
+void test_ttc (long num);
 
 int main(int argc, char **argv)
 {
   // test_tc(10);
   char *pend = NULL;
   // printf("%s\n", argv[0]);
-  int num = strtol (argv[1], &pend, 10);
+  long num = strtol (argv[1], &pend, 10);
   // test_tc(num);
-
+  test_ttc (num);
   // test_LRC();
-  test_TC (num);
+  // test_TC (num);
   // fool_test();
   // test_RFC();
   // keep_window_open();
@@ -57,6 +58,18 @@ int main(int argc, char **argv)
   // test_Bayesizn();
   return 0;
 }
+
+void test_ttc (long num)
+{
+  string path = "../training_set/easy_train/";
+  // string path = "../training_set/test_train/";
+
+  // string path = "../training_set/sougou_train/";
+  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
+  tc->auto_test (path, "io/result.txt", 0.5);
+  delete tc;
+}
+
 
 void test_TC (int num)
 {
@@ -137,10 +150,10 @@ void fool_test()
 
 void test_tc(int num)
 {
-  const double ratio = 0.8;
+  const double ratio = 0.2;
   // TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::Bayesian, "");
-  // TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
-  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::LogitRegression, "");
+  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
+  // TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::LogitRegression, "");
   printf ("1\n");
   const string working_path = "io/";
   unordered_map<string, vector<string>> class_map;
