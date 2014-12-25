@@ -60,7 +60,7 @@ void char_separator(std::vector<std::string>& tokens, const std::string& s, cons
 
 
 TextClassifier::TextClassifier(
-  int featurenum, 
+  long featurenum, 
   codingtype::SeparaterType encoding_t, 
   classifiertype::ClassifierType classifier_t,
   const char* classifier_config_f 

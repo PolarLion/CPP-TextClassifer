@@ -56,7 +56,7 @@ private:
   bool load_classes();
 public:
 	TextClassifier(
-    int featurenum = 0, 
+    long featurenum = 0, 
 		codingtype::SeparaterType encoding_t = codingtype::SeparaterType::GBK, 
     classifiertype::ClassifierType classifier_t = classifiertype::ClassifierType::Bayesian, 
     const char* classifier_config_f = ""
@@ -85,7 +85,7 @@ public:
 
   void batch_predict (const std::string& dir, const std::string& outfile);
 
-  
+  void auto_test (const std::string& train_dir, const std::string& resfile, const double ratio);
 
 };
 
