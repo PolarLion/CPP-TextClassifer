@@ -473,8 +473,17 @@ void TextClassifier::batch_predict (const std::string& dir, const std::string& o
 
 bool TextClassifier::auto_test (const std::string& train_dir, const std::string& resfile, const double ratio)
 {
-  using std::chrono::system_clock;
+  using namespace std::chrono;
+  std::ofstream outfile (resfile, std::ios::app);
+  if (outfile.fail()) {
+      printf("open outifle error\n");
+      return false;
+  }
 
+  system_clock::time_point today = system_clock::now();
+  std::time_t tt = system_clock::to_time_t (today);
+  outfile << std::string(ctime(&tt)) << "features : \t" << features_num << std::endl;
+  outfile << "class name\t"<<"training set\t"<<"testing set\t"<<"precision\t"<<"recall rate\t"<<"F value" << std::endl;
   // const std::string working_path = "io/";
   std::unordered_map<std::string, std::vector<std::string>> class_map;
   // string train_dir = "../training_set/easy_train/";
@@ -492,8 +501,8 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   // printf ("2\n");
   dirs.clear ();
   for (auto p = class_map.begin(); p != class_map.end(); ++p) {
-    const int maxindex = p->second.size() * ratio;
-    for (int i = 0; i < maxindex; ++i) {
+    const size_t maxindex = p->second.size() * ratio;
+    for (size_t i = 0; i < maxindex; ++i) {
       std::string spath = train_dir + p->first + "/" + p->second[i];
       std::ifstream infile (spath);
       if (infile.fail ()) {
@@ -501,14 +510,12 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
         return false;
       }
       infile.seekg (0, infile.end);
-      int length = infile.tellg();
+      size_t length = infile.tellg();
       infile.seekg (0, infile.beg);
       char* buffer = new char[length+1];
       buffer [length] = 0;
       infile.read (buffer, length);
-      // cout << buffer << endl;
       add_train_data (p->first, buffer);
-      // ++count;
       delete buffer;
       infile.close();
     }
@@ -567,15 +574,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   }
   int all = 0;
   std::cout << c_info1.size () << std::endl;
-  std::ofstream outfile (resfile, std::ios::app);
-  if (outfile.fail()) {
-      printf("open outifle error\n");
-      return false;
-  }
-  system_clock::time_point today = system_clock::now();
-  std::time_t tt = system_clock::to_time_t (today);
-  outfile << std::string(ctime(&tt)) << "features : \t" << features_num << std::endl;
-  outfile << "class name\t"<<"training set\t"<<"testing set\t"<<"precision\t"<<"recall rate\t"<<"F value" << std::endl;
+
   for (auto p = c_info1.begin(); p != c_info1.end(); ++p) {
       all += p->second;
       const double precision = c_info2[p->first] / (double)p->second;
