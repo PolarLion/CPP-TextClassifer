@@ -462,8 +462,6 @@ void TextClassifier::batch_predict (const std::string& dir, const std::string& o
   system_clock::time_point end_time = system_clock::now();
   tt = system_clock::to_time_t (end_time);
   outfile << "<end_time>\n  " << std::string (ctime (&tt)) << "</end_time>\n\n";
-  // system_clock::time_point past_time = end_time - start_time;
-  // tt = system_clock::to_time_t (past_time);
   outfile << "<processing_speed measurement = \"doc/s\">\n  ";
   outfile << (double) count_files * 1E3 / duration_cast<milliseconds> (end_time-start_time).count() ;
   outfile << "\n</processing_speed>\n\n";
@@ -483,12 +481,10 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   system_clock::time_point today = system_clock::now();
   std::time_t tt = system_clock::to_time_t (today);
   outfile << std::string(ctime(&tt)) << "features : \t" << features_num << std::endl;
-  outfile << "class name\t"<<"training set\t"<<"testing set\t"<<"precision\t"<<"recall rate\t"<<"F value" << std::endl;
-  // const std::string working_path = "io/";
+  
   std::unordered_map<std::string, std::vector<std::string>> class_map;
-  // string train_dir = "../training_set/easy_train/";
-  // string train_dir = "../training_set/test_train/";
   std::vector<std::string> dirs;
+
   get_dirs (train_dir, dirs);
   for (auto p = dirs.begin(); p != dirs.end(); ++p) {
     add_classname (*p);  
@@ -575,6 +571,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   int all = 0;
   std::cout << c_info1.size () << std::endl;
 
+  outfile << "class name\t" << "training set\t" << "testing set\t" << "precision\t" << "recall rate\t" << "F1 value" << std::endl;
   for (auto p = c_info1.begin(); p != c_info1.end(); ++p) {
       all += p->second;
       const double precision = c_info2[p->first] / (double)p->second;
@@ -582,20 +579,13 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       std::cout << "precision : " << precision << std::endl;
       std::cout << "recall rate : " << recall[p->first] << std::endl;
       std::cout << "F : " << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
-      outfile << p->first << "\t" << int(class_map[p->first].size() * ratio) << "\t"
-    << (int) (class_map[p->first].size() * (1.0-ratio)) << "\t" << precision << "\t" << recall[p->first] << "\t"
-    << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
+      outfile << p->first << "\t" << (int) class_map[p->first].size() * ratio << "\t" 
+        << (int) (class_map[p->first].size() * (1.0-ratio)) << "\t" << precision << "\t" << recall[p->first] << "\t"
+        << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
   }
   const double drecall = count_all_right / (double)count_all;
   outfile << "total :\t" << drecall << std::endl << std::endl;
-  //const double precision = count_all_right / (double)all;
-  //cout << "total recall rate : " << drecall << endl;
-  //cout << "total precision : " << precision << endl;
-  //cout << "total F : " << 2 * precision * drecall /(precision + drecall) << endl;
   std::cout << "total accuracy :\t" << drecall << std::endl;
-
-
-  // tc->show_model();
   return true;
 }
 
