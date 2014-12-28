@@ -421,7 +421,7 @@ void TextClassifier::batch_predict (const std::string& dir, const std::string& o
   system_clock::time_point start_time = system_clock::now();
   std::time_t tt = system_clock::to_time_t (start_time);
   outfile << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-  outfile << "<start_time>\n  " << std::string (ctime (&tt)) << "</start_time>\n\n";
+  outfile << "<start_time>\n  " << std::string (ctime (&tt)) << "</start_time>" << std::endl;
   // outfile.write (line.c_str(), line.size());
   std::unordered_map<std::string, std::vector<std::string>> class_of_files;
   std::vector<std::string> files;
@@ -458,7 +458,7 @@ void TextClassifier::batch_predict (const std::string& dir, const std::string& o
   }
   system_clock::time_point end_time = system_clock::now();
   tt = system_clock::to_time_t (end_time);
-  outfile << "<end_time>\n  " << std::string (ctime (&tt)) << "</end_time>\n\n";
+  outfile << "<end_time>" << std::endl << std::string (ctime (&tt)) << "</end_time>" << std::endl;
   outfile << "<processing_speed measurement = \"doc/s\">\n  ";
   outfile << (double) count_files * 1E3 / duration_cast<milliseconds> (end_time-start_time).count() ;
   outfile << "\n</processing_speed>\n\n";
@@ -475,16 +475,18 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       return false;
   }
 
+  // outfile << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" << std::endl;
   system_clock::time_point today = system_clock::now();
   std::time_t tt = system_clock::to_time_t (today);
-  outfile << std::string(ctime(&tt)) << "features : \t" << features_num << std::endl;
+  outfile << "<start time = \"" << std::string (ctime (&tt)) << "\">" << std::endl; 
+  outfile << "\t<features number>" << features_num << "</features number>" << std::endl;
   
   std::unordered_map<std::string, std::vector<std::string>> class_map;
   std::vector<std::string> dirs;
 
-  system_clock::time_point start_time = system_clock::now();
+  system_clock::time_point start_time = system_clock::now ();
   get_dirs (train_dir, dirs);
-  for (auto p = dirs.begin(); p != dirs.end(); ++p) {
+  for (auto p = dirs.begin (); p != dirs.end (); ++p) {
     add_classname (*p);  
     std::string sub_path = train_dir + *p + "/";
     std::vector<std::string> files;
@@ -492,9 +494,8 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     class_map [*p] = files;
     printf ("class %s has %ld files\n", sub_path.c_str (), (long)files.size());
   }
-  // printf ("2\n");
   dirs.clear ();
-  for (auto p = class_map.begin(); p != class_map.end(); ++p) {
+  for (auto p = class_map.begin (); p != class_map.end (); ++p) {
     const size_t maxindex = p->second.size() * ratio;
     for (size_t i = 0; i < maxindex; ++i) {
       std::string spath = train_dir + p->first + "/" + p->second[i];
@@ -515,26 +516,28 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     }
   }
   system_clock::time_point end_time = system_clock::now ();
-  outfile << "<perpare training set time>" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "</perpare training set time>" << std::endl;
+  outfile << "\t<perpare training set time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "\t</perpare training set time>" << std::endl;
+
   start_time = system_clock::now ();
-  preprocessor();
+  preprocessor ();
   end_time = system_clock::now ();
-  outfile << "<preprocessing time>" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "</preprocessing time>" << std::endl;
+  outfile << "\t<preprocessing time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "\t</preprocessing time>" << std::endl;
 
   start_time = system_clock::now ();
-  train();
+  train ();
   end_time = system_clock:: now ();
-  outfile << "<preprocessing time>" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "</preprocessing time>" << std::endl;
-  load_data();
+  outfile << "\t<training time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "\t</training time>" << std::endl;
 
+  load_data();
   //记录被标记为该类别的样本数（用于计算precision）
   std::unordered_map<std::string, int> c_info1;
   //记录被正确标注的样本数
   std::unordered_map<std::string, int> c_info2;
   std::unordered_map<std::string, double> recall;
+  size_t count_files = 0;
   int count_all_right = 0;
   int count_all = 0;
   for (auto p = class_map.begin(); p != class_map.end(); ++p) {
@@ -545,8 +548,8 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   for (auto p = class_map.begin(); p != class_map.end(); ++p) {
     int count_right = 0;
     int count = 0;
-    const int min = p->second.size() * ratio;
-    for (int i = min; i < p->second.size(); ++i) {
+    const size_t start_index = p->second.size() * ratio;
+    for (size_t i = start_index; i < p->second.size(); ++i) {
     // for (int i = 0; i < min; ++i) {
       std::string spath = train_dir + p->first + "/" + p->second[i];
       std::ifstream infile(spath);
@@ -554,8 +557,9 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
         printf("no such file %s\n", p->second[i].c_str());
         return false;
       }
+      ++count_files;
       infile.seekg (0, infile.end);
-      int length = infile.tellg();
+      int length = infile.tellg ();
       infile.seekg (0, infile.beg);
       char* buffer = new char [length+1];
       buffer [length] = 0;
@@ -590,9 +594,15 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
         << (int) (class_map[p->first].size() * (1.0-ratio)) << "\t" << precision << "\t" << recall[p->first] << "\t"
         << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
   }
+  outfile << "\t<processing_speed measurement = \"doc/s\">" << std::endl;
+  outfile << "\t\t"<< (double) count_files * 1E6 / duration_cast<microseconds> (end_time-start_time).count() ;
+  outfile << std::endl << "\t</processing_speed>" << std::endl;
+
   const double drecall = count_all_right / (double)count_all;
   outfile << "total :\t" << drecall << std::endl << std::endl;
   std::cout << "total accuracy :\t" << drecall << std::endl;
+
+  outfile << "</start_time>" << std::endl;
   return true;
 }
 
