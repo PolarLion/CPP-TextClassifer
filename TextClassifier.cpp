@@ -324,9 +324,6 @@ bool TextClassifier::load_classes()
   }
   infile.close();
   // for (auto p = classname_int.begin(); p != classname_int.end(); ++p) {
-  //   printf ("%s %ld\n", (p->first).c_str(), p->second);
-  // }
-  // printf("heeeeeeeeeeeeeeeeeeeeeeeeeee\n");
   return true;
 }
 
@@ -485,6 +482,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   std::unordered_map<std::string, std::vector<std::string>> class_map;
   std::vector<std::string> dirs;
 
+  system_clock::time_point start_time = system_clock::now();
   get_dirs (train_dir, dirs);
   for (auto p = dirs.begin(); p != dirs.end(); ++p) {
     add_classname (*p);  
@@ -516,9 +514,20 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       infile.close();
     }
   }
-
+  system_clock::time_point end_time = system_clock::now ();
+  outfile << "<perpare training set time>" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "</perpare training set time>" << std::endl;
+  start_time = system_clock::now ();
   preprocessor();
+  end_time = system_clock::now ();
+  outfile << "<preprocessing time>" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "</preprocessing time>" << std::endl;
+
+  start_time = system_clock::now ();
   train();
+  end_time = system_clock:: now ();
+  outfile << "<preprocessing time>" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "</preprocessing time>" << std::endl;
   load_data();
 
   //记录被标记为该类别的样本数（用于计算precision）
@@ -532,6 +541,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
      c_info2[p->first] = 0;
   }
 
+  start_time = system_clock::now ();
   for (auto p = class_map.begin(); p != class_map.end(); ++p) {
     int count_right = 0;
     int count = 0;
@@ -568,17 +578,14 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     //cout << "Recall Rate : " << count_right / (double)vf.size() << endl;
     recall [p->first] = count_right / (double)count;
   }
+  end_time = system_clock::now ();
   int all = 0;
-  std::cout << c_info1.size () << std::endl;
+  // std::cout << c_info1.size () << std::endl;
 
   outfile << "class name\t" << "training set\t" << "testing set\t" << "precision\t" << "recall rate\t" << "F1 value" << std::endl;
   for (auto p = c_info1.begin(); p != c_info1.end(); ++p) {
       all += p->second;
       const double precision = c_info2[p->first] / (double)p->second;
-      std::cout << "class " << p->first << " : \n";
-      std::cout << "precision : " << precision << std::endl;
-      std::cout << "recall rate : " << recall[p->first] << std::endl;
-      std::cout << "F : " << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
       outfile << p->first << "\t" << (int) class_map[p->first].size() * ratio << "\t" 
         << (int) (class_map[p->first].size() * (1.0-ratio)) << "\t" << precision << "\t" << recall[p->first] << "\t"
         << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
