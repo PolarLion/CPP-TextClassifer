@@ -496,7 +496,6 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     printf ("class %s has %ld files\n", sub_path.c_str (), (long)files.size());
   }
   dirs.clear ();
-  size_t count_train_files = 0;
   for (auto p = class_map.begin (); p != class_map.end (); ++p) {
     const size_t maxindex = p->second.size() * ratio;
     for (size_t i = 0; i < maxindex; ++i) {
@@ -509,29 +508,39 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       infile.seekg (0, infile.end);
       size_t length = infile.tellg();
       infile.seekg (0, infile.beg);
-      char* buffer = new char[length+1];
+      char* buffer = new char [length+1];
       buffer [length] = 0;
       infile.read (buffer, length);
       add_train_data (p->first, buffer);
       delete buffer;
-      infile.close();
+      infile.close ();
     }
   }
   system_clock::time_point end_time = system_clock::now ();
-  outfile << "\t<perpare_training_set_time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "</perpare_training_set_time>" << std::endl;
+  outfile << "\t<perpare_training_set_time measurement = \"s\">";
+  outfile << duration_cast<microseconds> (end_time-start_time).count() / 1E6;
+  outfile << "</perpare_training_set_time>" << std::endl;
+  outfile << "\t<perpare_training_set_speed measurement = \"docs / s\">";
+  outfile << get_training_size () * 1E6 / duration_cast<microseconds> (end_time-start_time).count();
+  outfile << "</perpare_training_set_speed>" << std::endl;
 
   start_time = system_clock::now ();
   preprocessor ();
   end_time = system_clock::now ();
-  outfile << "\t<preprocessing_time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "</preprocessing_time>" << std::endl;
+  outfile << "\t<preprocessing_time measurement = \"s\">";
+  outfile << duration_cast<microseconds> (end_time-start_time).count() / 1E6;
+  outfile << "</preprocessing_time>" << std::endl;
+
 
   start_time = system_clock::now ();
   train ();
   end_time = system_clock:: now ();
-  outfile << "\t<training_time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "</training_time>" << std::endl;
+  outfile << "\t<training_time measurement = \"s\">";
+  outfile << duration_cast<microseconds> (end_time-start_time).count() / 1E6;
+  outfile << "</training_time>" << std::endl;
+  outfile << "\t<training_speed measurement = \"docs / s\">";
+  outfile << get_training_size () * 1E6 / duration_cast<microseconds> (end_time-start_time).count();
+  outfile << "</training_time>" << std::endl;
 
   load_data();
   //记录被标记为该类别的样本数（用于计算precision）

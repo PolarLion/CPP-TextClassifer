@@ -19,14 +19,14 @@ void char_separator(std::vector<std::string>& tokens, const std::string& s, cons
 class TextClassifier
 {
 private:
-  const long features_num;
+  const size_t features_num;
 	const codingtype::SeparaterType encoding_type;
 	const classifiertype::ClassifierType classifier_type;
   const char* classifier_config_file;
 
   std::string features[FEATURE_NUM];
-	long count_classnum;
-	long count_training_set;
+	size_t count_classnum;
+	size_t count_training_set;
 	bool prepare_cts;
 
 	Classifier* classifier;
@@ -86,6 +86,18 @@ public:
   void batch_predict (const std::string& dir, const std::string& outfile);
 
   bool auto_test (const std::string& train_dir, const std::string& resfile, const double ratio);
+
+  size_t get_features_number () const {
+    return features_num;
+  }
+
+  size_t get_training_size () const {
+    return count_training_set;
+  }
+
+  size_t get_classes_number () const {
+    return count_classnum;
+  }
 
 };
 
