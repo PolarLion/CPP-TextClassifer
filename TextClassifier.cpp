@@ -478,8 +478,9 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   // outfile << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" << std::endl;
   system_clock::time_point today = system_clock::now();
   std::time_t tt = system_clock::to_time_t (today);
-  outfile << "<start time = \"" << std::string (ctime (&tt)) << "\">" << std::endl; 
-  outfile << "\t<features number>" << features_num << "</features number>" << std::endl;
+  outfile << std::endl << "<test name = \"begin\">" << std::endl;
+  outfile << "\t<start_time>" << std::endl;
+  outfile << "\t\t" << ctime (&tt) << "\t<start_time>" << std::endl; 
   
   std::unordered_map<std::string, std::vector<std::string>> class_map;
   std::vector<std::string> dirs;
@@ -495,6 +496,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     printf ("class %s has %ld files\n", sub_path.c_str (), (long)files.size());
   }
   dirs.clear ();
+  size_t count_train_files = 0;
   for (auto p = class_map.begin (); p != class_map.end (); ++p) {
     const size_t maxindex = p->second.size() * ratio;
     for (size_t i = 0; i < maxindex; ++i) {
@@ -516,20 +518,20 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     }
   }
   system_clock::time_point end_time = system_clock::now ();
-  outfile << "\t<perpare training set time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "\t</perpare training set time>" << std::endl;
+  outfile << "\t<perpare_training_set_time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "</perpare_training_set_time>" << std::endl;
 
   start_time = system_clock::now ();
   preprocessor ();
   end_time = system_clock::now ();
-  outfile << "\t<preprocessing time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "\t</preprocessing time>" << std::endl;
+  outfile << "\t<preprocessing_time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "</preprocessing_time>" << std::endl;
 
   start_time = system_clock::now ();
   train ();
   end_time = system_clock:: now ();
-  outfile << "\t<training time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
-    << "\t</training time>" << std::endl;
+  outfile << "\t<training_time measurement = \"s\">" << duration_cast<microseconds> (end_time-start_time).count() / 1E6
+    << "</training_time>" << std::endl;
 
   load_data();
   //记录被标记为该类别的样本数（用于计算precision）
@@ -583,26 +585,36 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     recall [p->first] = count_right / (double)count;
   }
   end_time = system_clock::now ();
+
   int all = 0;
   // std::cout << c_info1.size () << std::endl;
 
-  outfile << "class name\t" << "training set\t" << "testing set\t" << "precision\t" << "recall rate\t" << "F1 value" << std::endl;
+  outfile << "\t<detail_information>" << std::endl;
+  outfile << "\t\tclass name\t" << "training set\t" << "testing set\t" << "precision\t" << "recall rate\t" << "F1 value" << std::endl;
   for (auto p = c_info1.begin(); p != c_info1.end(); ++p) {
       all += p->second;
       const double precision = c_info2[p->first] / (double)p->second;
-      outfile << p->first << "\t" << (int) class_map[p->first].size() * ratio << "\t" 
+      outfile << "\t\t" <<  p->first << "\t" << (int) class_map[p->first].size() * ratio << "\t" 
         << (int) (class_map[p->first].size() * (1.0-ratio)) << "\t" << precision << "\t" << recall[p->first] << "\t"
         << precision * recall[p->first] * 2 /(recall[p->first] + precision) << std::endl;
   }
-  outfile << "\t<processing_speed measurement = \"doc/s\">" << std::endl;
+
+  const double drecall = count_all_right / (double)count_all;
+  outfile << "\t\t" << features_num << "\t" << drecall << std::endl;
+  outfile << "\t</detail_information>" << std::endl;
+  outfile << "\t<features_number>" << features_num << "</features_number>" << std::endl;
+  outfile << "\t<F1_value>" << drecall << "</F1_value>" << std::endl;
+  printf("total accuracy %f\n", drecall);
+
+  outfile << "\t<processing_speed measurement = \"docs/s\">" << std::endl;
   outfile << "\t\t"<< (double) count_files * 1E6 / duration_cast<microseconds> (end_time-start_time).count() ;
   outfile << std::endl << "\t</processing_speed>" << std::endl;
 
-  const double drecall = count_all_right / (double)count_all;
-  outfile << "total :\t" << drecall << std::endl << std::endl;
-  std::cout << "total accuracy :\t" << drecall << std::endl;
-
-  outfile << "</start_time>" << std::endl;
+  today = system_clock::now();
+  tt = system_clock::to_time_t (today);
+  outfile << "\t<start_time>" << std::endl;
+  outfile << "\t\t" << ctime (&tt) << "\t<start_time>" << std::endl; 
+  outfile << "</test name = \"end\">" << std::endl;
   return true;
 }
 
