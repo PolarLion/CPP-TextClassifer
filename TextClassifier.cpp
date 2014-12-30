@@ -630,7 +630,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   outfile << "</test name = \"end\">" << std::endl;
   outfile.close ();
 
-  outfile.open (resfile+".simple.txt");
+  outfile.open (resfile+".simple.txt", std::ios::app);
   if (outfile.fail()) {
     printf("TextClassifier::auto_test () : can't open file %s\n", (resfile+".simple.txt").c_str());
     return false;
