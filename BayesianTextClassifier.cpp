@@ -21,8 +21,10 @@ BayesianTextClassifier::~BayesianTextClassifier()
 	printf ("BayesianTC::~BayesianTextClassifier()\n");
 }
 
-void BayesianTextClassifier::show_bayesiantable() 
+bool BayesianTextClassifier::show_bayesiantable() 
 {
+	if (NULL == bayesiantable) 
+		return false;
   for ( long i = 0; i < features_num; ++i ) {
     printf("%ld : \n", i);
     for ( int j = 0; j < class_num; ++j) {
@@ -30,6 +32,7 @@ void BayesianTextClassifier::show_bayesiantable()
     }
     printf("\n");
   }
+  return true;
 }
 
 bool BayesianTextClassifier::init_bayesiantable(int f, int c)
@@ -54,23 +57,20 @@ bool BayesianTextClassifier::init_bayesiantable(int f, int c)
   return true;
 }
 
-void BayesianTextClassifier::train_on_file(const char* training_file)
+bool BayesianTextClassifier::train_on_file(const char* training_file)
 {
 	printf("BayesianTC::train_on_file() : start reading training file\n");
 	free_model();
 	std::ifstream infile (training_file);
 	if (infile.fail()) {
 		printf ("BayesianTC::train_on_file() error in opening %s\n", training_file);
-		exit(1);
+		return false;
 	}
-
-	// FILE * pfile = fopen(training_file, "r");
 
 	char* pend = NULL;
 	//get first line : trainging size, features number, class number
 	//and init the bayesiantable
 	char first_line[FIRST_LINE_SIZE];
-  // size_t first_line_size = 0;
   if ( !(infile.getline (first_line, FIRST_LINE_SIZE)).fail()) {
 		training_size = strtol (first_line, &pend, 10);
 		features_num = strtol (pend, &pend, 10);
@@ -82,14 +82,14 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
     } else {
       printf ("BayesianTC::train_on_file() : error there is a zero in :\
         training_size = %ld, features_num = %ld, class_num = %ld\n", training_size, features_num, class_num);
-      exit (1);
+      return false;
     }
 		init_bayesiantable(features_num, class_num);
 	}
 	else {
 		printf ("BayesianTC::train_on_file() : wrong traing file -- error in \
 			reading first line\n");
-		exit(1);
+		return false;
 	}
 
 	//edit the bayesiantable 
@@ -100,7 +100,7 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
   int *count_class = new int[class_num];
 	if ( NULL == count_class) {
 		printf ("BayesianTC::train_on_file() error allocate memory for count_class array\n");
-		exit (1);
+		return false;
 	}
   for (int i = 0; i < class_num; ++i) { count_class[i] = 0; }
 
@@ -152,7 +152,7 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
 	double *denominator = new double[class_num];
 	if ( NULL == denominator ) {
 		printf ("BayesianTC::train_on_file() error allocate memory for double[]\n");
-		exit(1);
+		return false;
 	}
 	for (int i = 0; i < class_num; ++i) {
 		denominator[i] = 0;
@@ -173,14 +173,15 @@ void BayesianTextClassifier::train_on_file(const char* training_file)
 	delete denominator;
   delete count_class;
 	printf("BayesianTC::train_on_file() finished training !\n");
+	return true;
 }
 
-void BayesianTextClassifier::save_model(const char* model_file)
+bool BayesianTextClassifier::save_model(const char* model_file)
 {
 	FILE * pfile = fopen(model_file, "wb");
 	if ( NULL == pfile ) { 
 		printf ("BayesianTC::save_model() no such directort %s\n", model_file);
-		exit(1);
+		return false;
 	}
   int temp[2];
   temp[0] = features_num;
@@ -191,15 +192,16 @@ void BayesianTextClassifier::save_model(const char* model_file)
 	}
 	fclose(pfile);
 	printf("CBayesianTextClassifier::save_model() : saved model successful !!\n");
+	return true;
 }
 
-void BayesianTextClassifier::load_model(const char* model_file)
+bool BayesianTextClassifier::load_model(const char* model_file)
 {
 	free_model();
 	FILE * pfile = fopen(model_file, "rb");
 	if ( NULL == pfile ) { 
 		printf ("BayesianTC::load_model() error in opening %s\n", model_file);
-		exit(1);
+		return false;
 	}
 	// char *pend = NULL;
   int temp[2];
@@ -210,19 +212,19 @@ void BayesianTextClassifier::load_model(const char* model_file)
 			features_num = %ld, class_num = %ld\n", features_num, class_num);
 		if ( !init_bayesiantable(features_num, class_num) ) {
       printf ("BayesianTC::load_model() : init_bayesiantable() error\n");
-      exit (1);
+      return false;
     }
 	}
 	else {
 		printf ("BayesianTC::load_model() : wrong model file ---- error in \
 			reading first line\n");
-		exit (1);
+		return false;
 	}
 
 	for (int i = 0; i < features_num; ++i) {
 		if ( fread (bayesiantable[i].v, sizeof(double), class_num, pfile) != (size_t)class_num ) {
 			printf ("BayesianTC::load_model() : can't get values for line %d v\n", i);
-			exit(1);
+			return false;
 		}
 	}
 
@@ -236,13 +238,14 @@ void BayesianTextClassifier::load_model(const char* model_file)
 	is_free = false;
 	fclose(pfile);
 	printf("BayesianTC::load_model() :  load model successful !!\n");
+	return true;
 }
 
-void BayesianTextClassifier::predicted_category(const double* features, int& res)
+bool BayesianTextClassifier::predicted_category(const double* features, int& res)
 {
   if ( class_num <= 1 || features_num < 1 || NULL == bayesiantable ) {
     printf ("BayesianTC::predicted_category() model hasn't been inited yet\n");
-    return;
+    return false;
   }
   double count_word = 0;
   double max = 0.0;
@@ -264,14 +267,15 @@ void BayesianTextClassifier::predicted_category(const double* features, int& res
       res = i;
     }
 	}
+	return true;
 	// printf ("res : %d\n", res);
 }
 
-void BayesianTextClassifier::free_model()
+bool BayesianTextClassifier::free_model()
 {
 	if ( is_free && NULL == bayesiantable ) {
 		printf("free model successful!\n");
-		return;
+		return true;
 	}
 	else if ( NULL != bayesiantable) {
 		for (int i = 0; i < features_num; ++i) {
@@ -290,9 +294,10 @@ void BayesianTextClassifier::free_model()
 	if ( NULL == bayesiantable ) {
 		printf("free model successful!\n");
 	}
+	return true;
 }
 
-void BayesianTextClassifier::show_model() 
+bool BayesianTextClassifier::show_model() 
 {
-  show_bayesiantable();
+  return show_bayesiantable();
 }

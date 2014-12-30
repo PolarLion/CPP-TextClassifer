@@ -26,24 +26,27 @@ LogitRegressionClassifier::~LogitRegressionClassifier()
 	printf ("LogitRegressionClassifier::~LogitRegressionClassifier()\n");
 }
 
-void LogitRegressionClassifier::init_model(const char* config_file)
+bool LogitRegressionClassifier::init_model(const char* config_file)
 {
 	// printf ("LogitRegressionClassifier:init_model() \n");
 	//nothing to be inited
+	return true;
 }
 
-void LogitRegressionClassifier::train_on_file(const char* training_file)
+bool LogitRegressionClassifier::train_on_file(const char* training_file)
 {
 	printf("CLogitRegressionClassifier::train_on_file() : start reading training file\n");
-	free_model();
+	if ( !free_model()) {
+		return false;
+	}
 	alglib::real_2d_array xy;
 	alglib::mnlreport lmrep;
 	alglib::ae_int_t info;
 	
 	std::ifstream infile (training_file);
-	if (infile.fail()) {
+	if (infile.fail ()) {
 		printf ("BayesianTC::train_on_file() error in opening %s\n", training_file);
-		exit(1);
+		return false;
 	}
 
 	char* pend = NULL;
@@ -61,13 +64,13 @@ void LogitRegressionClassifier::train_on_file(const char* training_file)
 	else {
 		printf ("LogitRegressionClassifier::train_on_file() : wrong traing file ---- error in \
 			reading first line\n");
-		exit (1);
+		return false;
 	}
 
 	double *alldata = (double*) malloc (sizeof(double)*(features_num + 1)*training_size);
 	if ( NULL == alldata ) {
 		printf ("LogitRegressionClassifier::train_on_file() can't allocate memory for alldata\n");
-		exit (1);
+		return false;
 	}
 	// //edit the bayesiantable 
 	// size_t features_line_size = features_num * 10+ 1;
@@ -138,27 +141,28 @@ void LogitRegressionClassifier::train_on_file(const char* training_file)
   if ( -2 == info ) {
   	printf("LogitRegressionClassifier::train_on_file() \
   		there is a point with class number outside of [0..NClasses-1].\n");
-  	exit (1);
+  	return false;
   }
   else if ( -1 == info ) {
   	printf("LogitRegressionClassifier::train_on_file() \
   		incorrect parameters was passed (NPoints<NVars+2, NVars<1, NClasses<2).\n");
-  	exit (1);
+  	return false;
   }
 	is_free = false;
 	// fclose(pfile);
 	// delete features_line;
 	// delete class_line;
 	printf("LogitRegressionClassifier::train_on_file() finished training !\n");
+	return true;
 }
 
-void LogitRegressionClassifier::save_model(const char* model_file)
+bool LogitRegressionClassifier::save_model(const char* model_file)
 {
 	alglib::real_2d_array a;
 	FILE * pfile = fopen(model_file, "wb");
 	if ( NULL == pfile ) { 
 		printf ("LogitRegressionClassifier::save_model() no such directort %s\n", model_file);
-		exit (1);
+		return false;
 	}
   long temp[2];
   temp[0] = features_num;
@@ -176,7 +180,7 @@ void LogitRegressionClassifier::save_model(const char* model_file)
   double *temp2 = (double*) malloc (sizeof(double) * length);
   if ( NULL == temp2 ) {
   	printf("LogitRegressionClassifier::save_model() can't allocate memory\n");
-  	exit (1);
+  	return false;
   }
   int index = 0;
   for (int i = 0; i < class_num-1; ++i) {
@@ -196,9 +200,10 @@ void LogitRegressionClassifier::save_model(const char* model_file)
   free (temp2);
 	fclose (pfile);
 	printf ("CLogitRegressionClassifier::save_model() : saved model successful !!\n");
+	return true;
 }
 
-void LogitRegressionClassifier::load_model(const char* model_file)
+bool LogitRegressionClassifier::load_model(const char* model_file)
 {
 	free_model();
 	alglib::real_2d_array a;
@@ -244,9 +249,10 @@ void LogitRegressionClassifier::load_model(const char* model_file)
 	free (temp2);
 	fclose (pfile);
 	printf("LogitRegressionClassifier::load_model() :  load model successful !!\n");
+	return true;
 }
 
-void LogitRegressionClassifier::predicted_category(const double* features, int& res)
+bool LogitRegressionClassifier::predicted_category(const double* features, int& res)
 {
 	// printf("CLogitRegressionClassifier::predicted_category()\n");
 	// for (int i = 0; i < features_num; ++i) {
@@ -278,17 +284,19 @@ void LogitRegressionClassifier::predicted_category(const double* features, int& 
 
 	// printf ("res : %ld\n", res);
 	delete yp;
+	return true;
 }
 
-void LogitRegressionClassifier::free_model()
+bool LogitRegressionClassifier::free_model()
 {
 	if ( is_free ) {
 		printf("free model successful!\n");
-		return;
+		return false;
 	}
 	training_size = 0;
 	features_num = 0;
 	class_num = 0;
 	is_free = true;
 	printf("free model successful!\n");
+	return true;
 }
