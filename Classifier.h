@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace classifiertype{
+namespace classifiertype {
   enum ClassifierType{
     Bayesian = 0,
     RandomForest, 
