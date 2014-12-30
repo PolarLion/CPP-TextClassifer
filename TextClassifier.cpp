@@ -481,7 +481,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   outfile << std::endl << "<test name = \"begin\">" << std::endl;
   outfile << "\t<start_time>" << std::endl;
   outfile << "\t\t" << ctime (&tt) << "\t<start_time>" << std::endl; 
-  
+  outfile << "\t<features_number>" << features_num << "</features_number>" << std::endl;
   std::unordered_map<std::string, std::vector<std::string>> class_map;
   std::vector<std::string> dirs;
 
@@ -615,7 +615,6 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   const double drecall = count_all_right / (double)count_all;
   outfile << "\t\t" << features_num << "\t" << drecall << std::endl;
   outfile << "\t</detail_information>" << std::endl;
-  outfile << "\t<features_number>" << features_num << "</features_number>" << std::endl;
   outfile << "\t<F1_value>" << drecall << "</F1_value>" << std::endl;
   printf("total accuracy %f\n", drecall);
 
