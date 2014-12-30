@@ -471,7 +471,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   using namespace std::chrono;
   std::ofstream outfile (resfile, std::ios::app);
   if (outfile.fail()) {
-      printf("open outifle error\n");
+      printf("TextClassifier::auto_test () : open outifle error\n");
       return false;
   }
 
@@ -502,13 +502,17 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       std::string spath = train_dir + p->first + "/" + p->second[i];
       std::ifstream infile (spath);
       if (infile.fail ()) {
-        printf ("no such file %s\n", p->second[i].c_str());
+        printf ("TextClassifier::auto_test () : no such file %s\n", p->second[i].c_str());
         return false;
       }
       infile.seekg (0, infile.end);
       size_t length = infile.tellg();
       infile.seekg (0, infile.beg);
       char* buffer = new char [length+1];
+      if (NULL == buffer) {
+        printf("TextClassifier::auto_test () : can't allocate memory\n");
+        return false;
+      }
       buffer [length] = 0;
       infile.read (buffer, length);
       add_train_data (p->first, buffer);
@@ -624,6 +628,15 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   outfile << "\t<start_time>" << std::endl;
   outfile << "\t\t" << ctime (&tt) << "\t<start_time>" << std::endl; 
   outfile << "</test name = \"end\">" << std::endl;
+  outfile.close ();
+
+  outfile.open (resfile+".simple.txt");
+  if (outfile.fail()) {
+    printf("TextClassifier::auto_test () : can't open file %s\n", (resfile+".simple.txt").c_str());
+    return false;
+  }
+  outfile << get_features_number () << "\t" << drecall << std::endl;
+  outfile.close ();
   return true;
 }
 

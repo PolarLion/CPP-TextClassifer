@@ -44,11 +44,14 @@ void test_ttc (long num);
 int main(int argc, char **argv)
 {
   // test_tc(10);
-  char *pend = NULL;
+  // char *pend = NULL;
   // printf("%s\n", argv[0]);
-  long num = strtol (argv[1], &pend, 10);
+  // long num = strtol (argv[1], &pend, 10);
+  for (size_t i = 100; i < 3500; i += 100) {
+    test_ttc (i);
+  }
   // test_tc(num);
-  test_ttc (num);
+  // test_ttc (num);
   // test_LRC();
   // test_TC (num);
   // fool_test();
@@ -66,7 +69,7 @@ void test_ttc (long num)
 
   // string path = "../training_set/sougou_train/";
   TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
-  tc->auto_test (path, "io/result.txt", 0.5);
+  tc->auto_test (path, "io/result.xml", 0.5);
   delete tc;
 }
 
@@ -150,7 +153,7 @@ void fool_test()
 
 void test_tc(int num)
 {
-  const double ratio = 0.2;
+  const double ratio = 0.7;
   // TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::Bayesian, "");
   TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
   // TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::LogitRegression, "");
@@ -167,7 +170,7 @@ void test_tc(int num)
   for (auto p = dirs.begin(); p != dirs.end(); ++p) {
   	tc->add_classname(*p);	
   	string spath = path+*p+"/";
-  	cout << "process : "<< spath << endl;
+  	cout << "process : "<< spath << " : ";
   	vector<string> files;
   	get_files(spath, files);
   	class_map[*p] = files;
@@ -207,7 +210,6 @@ void test_tc(int num)
   printf ("5\n");
   // tc->save_model();
   tc->load_data();
-  printf ("6\n");
 
  //  printf ("hehehehehehehe\n");
 
