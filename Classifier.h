@@ -28,5 +28,5 @@ public:
   virtual bool load_model(const char* model_file) = 0;
 	virtual bool predicted_category(const double* features, int& res) = 0;
   virtual bool free_model() = 0;
-  virtual bool show_model() {}
+  virtual bool show_model() { return true; }
 };
