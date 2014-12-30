@@ -72,12 +72,6 @@ public:
   void add_classname(const std::string& classname);
   void add_train_data(const std::string& classname, const std::string& buffer);
   void show_model();
-	// void set_traing_size(int size);
-	// void set_classes(int size, char* classesname);
-	// void add_train_data(const char* classname, char *data);
-	// void prepare_training_file();
-	
-	// void add_classname(const std::string& classname);
 
   bool add_training_set (const std::string& train_dir);
 
