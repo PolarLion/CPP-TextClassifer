@@ -50,9 +50,9 @@ private:
     return std::string();
   }
 
-  void prepare_classname_to_string();
+  bool prepare_classname_to_string();
 
-  void save_classes() const;
+  bool save_classes() const;
   bool load_classes();
 public:
 	TextClassifier(
@@ -63,21 +63,21 @@ public:
     );
 	~TextClassifier();
 
-	void load_features();
+	bool load_features();
   // void train();
   bool load_data();
   const char* predicted_category(const char* data) const;
 
-  void preprocessor();
-  void add_classname(const std::string& classname);
-  void add_train_data(const std::string& classname, const std::string& buffer);
+  bool preprocessor();
+  bool add_classname(const std::string& classname);
+  bool add_train_data(const std::string& classname, const std::string& buffer);
   void show_model();
 
   bool add_training_set (const std::string& train_dir);
 
-  void train ();
+  bool train ();
 
-  void batch_predict (const std::string& dir, const std::string& outfile);
+  bool batch_predict (const std::string& dir, const std::string& outfile);
 
   bool auto_test (const std::string& train_dir, const std::string& resfile, const double ratio);
 
