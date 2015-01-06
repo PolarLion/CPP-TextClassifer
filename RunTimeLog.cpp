@@ -3,13 +3,31 @@
 #include <fstream>
 #include <ctime>
 #include <string>
+#include <assert.h>
 #include <string.h>
+#include <ctime>
+#include <chrono>
+#include <ratio>
+
+time_t timer;
+
+char* ctime () 
+{
+	time (&timer);
+	char* s_time = ctime (&timer);
+	char* c = strrchr (s_time, '\n');
+	if (NULL != c)
+		*c = 0;
+	return s_time;
+}
+
 
 RunTimeLog::RunTimeLog (const char* logfilename)
 	: log_filename (logfilename)
-	, open_sucess (false)
+	, open_success (false)
 {
 	log_file.open (log_filename);
+	assert (log_file.is_open ());	
 	open_success = log_file.is_open ();
 }
 
@@ -19,6 +37,7 @@ RunTimeLog::~RunTimeLog ()
 	if (log_file.is_open ()) {
 		log_file.close ();
 	}
+	open_success = false;
 }
 
 
@@ -30,13 +49,12 @@ bool RunTimeLog::write_log (const char* logtext, LogType type)
 		 return false;
 	 }
 	} 
+	time (&timer);
+	log_file << "<" << type_to_str (type) << " time = \"" << ctime() << "\">"; 
 	log_file.write (logtext, strlen(logtext));
+	log_file << "</" << type_to_str (type) << ">" << std::endl;
 	return true;
 }
 
 
-bool RunTimeLog::clear_log ()
-{
-	return true;
-}
 
