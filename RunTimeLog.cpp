@@ -3,6 +3,8 @@
 #include <fstream>
 #include <ctime>
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 
@@ -48,7 +50,7 @@ bool RunTimeLog::write_log (LogType type, const char* logtext, ...)
 		 return false;
 	 }
 	} 
-
+	log_file << "<" << type_to_str (type) << " time = \"" << ctime() << "\">"; 
 	va_list args;
 	char buffer[BUFFER_SIZE] = {0};
 	va_start (args, logtext);
@@ -58,15 +60,24 @@ bool RunTimeLog::write_log (LogType type, const char* logtext, ...)
 		if ('%' == logtext[pos]) {
 			pos++;
 			switch (logtext[pos]) {
-			case 's':
-				printf ("in %%s\n");
-				unsigned char* chptr = va_arg (args, unsigned char *);
-				int i = 0;
-				while (chptr[i] && buffer_pos < BUFFER_SIZE) {
-					printf ("%c\n", chptr[i]);
-					buffer[buffer_pos++] = chptr[i++];
+				case 's':{
+					unsigned char* chptr = va_arg (args, unsigned char *);
+					//printf ("in %s\n", chptr);
+					int i = 0;
+					while (chptr[i] && buffer_pos < BUFFER_SIZE) {
+						//printf ("%c\n", chptr[i]);
+						buffer[buffer_pos++] = chptr[i++];
+					}
+					pos++;
+					break;
 				}
-				break;
+				case 'd':{
+					buffer_pos +=  sprintf (&buffer[buffer_pos], "%d", va_arg (args, int));
+					pos++;
+					break;
+				}
+				default:
+					break;
 			}
 		}
 		else if (buffer_pos < BUFFER_SIZE) {
@@ -76,7 +87,6 @@ bool RunTimeLog::write_log (LogType type, const char* logtext, ...)
 			break;
 		}
 	}
-	log_file << "<" << type_to_str (type) << " time = \"" << ctime() << "\">"; 
 	log_file.write (buffer, strlen(buffer));
 	log_file << "</" << type_to_str (type) << ">" << std::endl;
 	return true;
