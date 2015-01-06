@@ -9,10 +9,10 @@
 #include <chrono>
 #include <ratio>
 
-time_t timer;
 
 char* ctime () 
 {
+	time_t timer;
 	time (&timer);
 	char* s_time = ctime (&timer);
 	char* c = strrchr (s_time, '\n');
@@ -26,15 +26,17 @@ RunTimeLog::RunTimeLog (const char* logfilename)
 	: log_filename (logfilename)
 	, open_success (false)
 {
-	log_file.open (log_filename);
+	log_file.open (log_filename, std::ios::app);
 	assert (log_file.is_open ());	
 	open_success = log_file.is_open ();
+	log_file << "<start time = \"" << ctime() << ">" << std::endl; 
 }
 
 
 RunTimeLog::~RunTimeLog ()
 {
 	if (log_file.is_open ()) {
+	  log_file << "</end time = \"" << ctime() << ">" << std::endl << std::endl; 
 		log_file.close ();
 	}
 	open_success = false;
@@ -49,7 +51,6 @@ bool RunTimeLog::write_log (const char* logtext, LogType type)
 		 return false;
 	 }
 	} 
-	time (&timer);
 	log_file << "<" << type_to_str (type) << " time = \"" << ctime() << "\">"; 
 	log_file.write (logtext, strlen(logtext));
 	log_file << "</" << type_to_str (type) << ">" << std::endl;
