@@ -4,8 +4,9 @@
 #include <ctime>
 #include <assert.h>
 #include <string.h>
+#include <stdarg.h>
 
-
+#define BUFFER_SIZE 1000
 char* ctime () 
 {
 	time_t timer;
@@ -25,7 +26,7 @@ RunTimeLog::RunTimeLog (const char* logfilename)
 	log_file.open (log_filename, std::ios::app);
 	assert (log_file.is_open ());	
 	open_success = log_file.is_open ();
-	log_file << "<start time = \"" << ctime() << ">" << std::endl; 
+	log_file << std::endl <<  "<start time = \"" << ctime() << ">" << std::endl; 
 }
 
 
@@ -47,8 +48,36 @@ bool RunTimeLog::write_log (LogType type, const char* logtext, ...)
 		 return false;
 	 }
 	} 
+
+	va_list args;
+	char buffer[BUFFER_SIZE] = {0};
+	va_start (args, logtext);
+	int pos = 0;
+	int buffer_pos = 0;
+	while (logtext[pos]) {
+		if ('%' == logtext[pos]) {
+			pos++;
+			switch (logtext[pos]) {
+			case 's':
+				printf ("in %%s\n");
+				unsigned char* chptr = va_arg (args, unsigned char *);
+				int i = 0;
+				while (chptr[i] && buffer_pos < BUFFER_SIZE) {
+					printf ("%c\n", chptr[i]);
+					buffer[buffer_pos++] = chptr[i++];
+				}
+				break;
+			}
+		}
+		else if (buffer_pos < BUFFER_SIZE) {
+			buffer[buffer_pos++] = logtext[pos++];
+		}
+		else {
+			break;
+		}
+	}
 	log_file << "<" << type_to_str (type) << " time = \"" << ctime() << "\">"; 
-	log_file.write (logtext, strlen(logtext));
+	log_file.write (buffer, strlen(buffer));
 	log_file << "</" << type_to_str (type) << ">" << std::endl;
 	return true;
 }

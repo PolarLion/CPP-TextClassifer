@@ -68,8 +68,8 @@ int main(int argc, char **argv)
 void test_log ()
 {
 	RunTimeLog t("io/log.txt");
-	t.write_log (t.LOGTYPE_ERROR, "hehehe");
-	
+	const char* str = "doge";
+	t.write_log (t.LOGTYPE_ERROR, "This is a %s", str);
 
 }
 
