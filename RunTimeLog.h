@@ -3,7 +3,6 @@
 #include <fstream>
 
 
-
 class RunTimeLog 
 {
 public:
