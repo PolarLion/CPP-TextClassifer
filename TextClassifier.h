@@ -8,9 +8,8 @@
 
 
 #include "Classifier.h"
-// #include "BayesianTextClassifier.h"
 #include "SingleCharacterSeparater.h"
-// #include "LogitRegressionClassifier.h"
+#include "RunTimeLog.h"
 
 #define FEATURE_NUM 3500
 
@@ -35,6 +34,7 @@ private:
   std::unordered_map<int, std::string> int_classname;
   std::unordered_map<std::string, int> classname_int;
   std::unordered_map<int, std::string> class_to_string_map;
+	RunTimeLog runtime_log;
   
   int classname_to_int(const std::string& classname) const {
     if (classname_int.find(classname) != classname_int.end()) {

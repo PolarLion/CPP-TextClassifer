@@ -32,7 +32,9 @@ public:
 	RunTimeLog (const char* logfilename);
 	~RunTimeLog ();
 
-	bool write_log (const char* logtext, LogType type);
+	//bool write_log (LogType type, const char* logtext);
+	bool write_log (LogType type, const char* logtext, ...);
+
 	bool is_open () const {
 		return open_success;
 	}

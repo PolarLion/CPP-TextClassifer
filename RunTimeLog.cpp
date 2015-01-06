@@ -39,7 +39,7 @@ RunTimeLog::~RunTimeLog ()
 }
 
 
-bool RunTimeLog::write_log (const char* logtext, LogType type)
+bool RunTimeLog::write_log (LogType type, const char* logtext, ...)
 {
 	if (!open_success) {
 	 log_file.open (log_filename);

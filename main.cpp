@@ -13,6 +13,7 @@
 // #include "TextClassifier.h"
 #include <stdio.h>
 
+#include "RunTimeLog.h"
 #include "TextClassifier.h"
 #include "BayesianTextClassifier.h"
 #include "RandomForestClassifier.h"
@@ -30,7 +31,6 @@ void keep_window_open()
 	cin >> c;
 }
 
-
 using std::ifstream;
 
 void test_tc (int num);
@@ -40,18 +40,20 @@ void test_RFC ();
 void test_LRC ();
 void test_TC (int num);
 void test_ttc (long num);
+void test_log ();
 
 int main(int argc, char **argv)
 {
+	test_log ();
   // test_tc(10);
-  // char *pend = NULL;
-  // printf("%s\n", argv[0]);
-  // long num = strtol (argv[1], &pend, 10);
-  for (size_t i = 100; i < 3500; i += 100) {
-    test_ttc (i);
-  }
+  //char *pend = NULL;
+  //printf("%s\n", argv[0]);
+  //long num = strtol (argv[1], &pend, 10);
+//  for (size_t i = 100; i < 3500; i += 100) {
+//    test_ttc (i);
+//  }
   // test_tc(num);
-  // test_ttc (num);
+  //test_ttc (num);
   // test_LRC();
   // test_TC (num);
   // fool_test();
@@ -61,6 +63,16 @@ int main(int argc, char **argv)
   // test_Bayesizn();
   return 0;
 }
+
+
+void test_log ()
+{
+	RunTimeLog t("io/log.txt");
+	t.write_log (t.LOGTYPE_ERROR, "hehehe");
+	
+
+}
+
 
 void test_ttc (long num)
 {

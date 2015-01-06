@@ -28,6 +28,7 @@
   const char* utf8_features_file_path = "io/utf8features.txt";
   const char* result_file_path = "io/result.txt";
   const char* classes_file_path = "io/classes.txt";
+	const char* log_file_path = "io/log.txt";
 #else
   const char* training_file_path = "io\\train.txt";
   const char* model_file_path = "io\\model.txt";
@@ -35,6 +36,7 @@
   const char* utf8_features_file_path = "io\\utf8features.txt";
   const char* result_file_path = "io\\result.txt";
   const char* classes_file_path = "io\\classes.txt";
+	const char* log_file_path = "io\\log.txt";
 #endif
 
 
@@ -59,6 +61,8 @@ void char_separator(std::vector<std::string>& tokens, const std::string& s, cons
 }
 
 
+
+
 TextClassifier::TextClassifier(
   long featurenum, 
   codingtype::SeparaterType encoding_t, 
@@ -73,6 +77,7 @@ TextClassifier::TextClassifier(
   , count_training_set(0)
   , prepare_cts(false)
   , classifier(NULL)
+	, runtime_log (log_file_path)
 {
   if ( classifiertype::ClassifierType::Bayesian == classifier_type ) {
     classifier = new bayesianc::BayesianTextClassifier();
@@ -84,16 +89,17 @@ TextClassifier::TextClassifier(
     classifier = new logitregressionc::LogitRegressionClassifier();
   }
   else {
-
   }
 
   if ( NULL == classifier ) {
     printf ("TextClassifier::TextClassifier(): can't allocate memory for classifier\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::TextClassifier(): can't allocate memory for classifier");
   }
   load_features();
   std::ofstream outfile(training_file_path);
   if ( outfile.fail() ) {
     printf("TextClassifier::TextClassifier(): error in opening %s\n", training_file_path);
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::TexiClassifier() : error in opening ");
   }
   outfile.close();
 }
