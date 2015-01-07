@@ -1,4 +1,3 @@
-
 #include "TextClassifier.h"
 #include "BayesianTextClassifier.h"
 #include "RandomForestClassifier.h"
@@ -192,9 +191,9 @@ bool TextClassifier::load_data()
 
 bool TextClassifier::prepare_classname_to_string()
 {
-  for (int i = 0; i < count_classnum; ++i) {
+  for (long i = 0; i < count_classnum; ++i) {
     std::string str;
-    for (int j = 0; j < count_classnum; ++j) {
+    for (long j = 0; j < count_classnum; ++j) {
       if (i == j) {
         str += "1 ";
       }
@@ -229,7 +228,7 @@ bool TextClassifier::add_train_data(const std::string& classname, const std::str
     return false;
   }
 
-  for (int i = 0; i < features_num; ++i) {
+  for (long i = 0; i < features_num; ++i) {
     auto tp = bag.find(features[i]);
     if (tp != bag.end()) {
       outfile << tp->second << " ";// / (double)count_word << " ";
@@ -255,7 +254,7 @@ bool TextClassifier::preprocessor()
     return false;
   }
   infile.seekg (0, infile.end);
-  int length = infile.tellg();
+	std::streamoff length = infile.tellg();
   infile.seekg (0, infile.beg);
   char *buffer = new char[length];
   if (nullptr == buffer) {
@@ -393,7 +392,7 @@ const char* TextClassifier::predicted_category(const char* data) const
     ++count_word;
   }
   double *fv = new double[features_num];
-  for (int i = 0; i < features_num; ++i) {
+  for (long i = 0; i < features_num; ++i) {
     auto p = bag.find (features[i]);
     if ( p != bag.end() ) {
       fv[i] = p->second;// / (double)count_word;
@@ -448,7 +447,7 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
 				return false;
       } 
       infile.seekg(0, infile.end); 
-      int length = infile.tellg(); 
+			std::streamoff length = infile.tellg(); 
       infile.seekg(0, infile.beg); 
       char* buffer = new char[length+1]; 
       if (NULL == buffer) { 
@@ -499,7 +498,7 @@ bool TextClassifier::batch_predict (const std::string& dir, const std::string& o
       return false;
     }
     infile.seekg(0, infile.end); 
-    long length = infile.tellg(); 
+		std::streamoff length = infile.tellg(); 
     infile.seekg(0, infile.beg); 
     char* buffer = new char[length+1]; 
     if (NULL == buffer) { 
@@ -568,7 +567,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   }
   dirs.clear ();
   for (auto p = class_map.begin (); p != class_map.end (); ++p) {
-    const size_t maxindex = p->second.size() * ratio;
+    const size_t maxindex = (size_t)p->second.size() * ratio;
     for (size_t i = 0; i < maxindex; ++i) {
       std::string spath = train_dir + p->first + "/" + p->second[i];
       std::ifstream infile (spath);
@@ -579,7 +578,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
         return false;
       }
       infile.seekg (0, infile.end);
-      size_t length = infile.tellg();
+      auto length = infile.tellg();
       infile.seekg (0, infile.beg);
       char* buffer = new char [length+1];
       if (NULL == buffer) {
@@ -638,7 +637,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   for (auto p = class_map.begin(); p != class_map.end(); ++p) {
     int count_right = 0;
     int count = 0;
-    const size_t start_index = p->second.size() * ratio;
+    const size_t start_index = (size_t)p->second.size() * ratio;
     for (size_t i = start_index; i < p->second.size(); ++i) {
     // for (int i = 0; i < min; ++i) {
       std::string spath = train_dir + p->first + "/" + p->second[i];
@@ -649,7 +648,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       }
       ++count_files;
       infile.seekg (0, infile.end);
-      int length = infile.tellg ();
+      auto length = infile.tellg ();
       infile.seekg (0, infile.beg);
       char* buffer = new char [length+1];
       buffer [length] = 0;

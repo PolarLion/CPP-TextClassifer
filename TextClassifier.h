@@ -18,14 +18,14 @@ void char_separator(std::vector<std::string>& tokens, const std::string& s, cons
 class TextClassifier
 {
 private:
-  const size_t features_num;
+  const long features_num;
 	const codingtype::SeparaterType encoding_type;
 	const classifiertype::ClassifierType classifier_type;
   const char* classifier_config_file;
 
   std::string features[FEATURE_NUM];
-	size_t count_classnum;
-	size_t count_training_set;
+	long count_classnum;
+	long count_training_set;
 	bool prepare_cts;
 
 	Classifier* classifier;
