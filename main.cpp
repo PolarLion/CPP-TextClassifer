@@ -68,8 +68,9 @@ int main(int argc, char **argv)
 void test_log ()
 {
 	RunTimeLog t("io/log.txt");
-	const char* str = "doge";
-	t.write_log (t.LOGTYPE_ERROR, "This is a %s", str);
+	const char* str = "doges";
+	int n = 12;
+	t.write_log (t.LOGTYPE_ERROR, "This are %d %s", n, str);
 
 }
 
