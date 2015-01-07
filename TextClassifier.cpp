@@ -254,7 +254,7 @@ bool TextClassifier::preprocessor()
     return false;
   }
   infile.seekg (0, infile.end);
-	std::streamoff length = infile.tellg();
+	unsigned long length = (unsigned long) infile.tellg();
   infile.seekg (0, infile.beg);
   char *buffer = new char[length];
   if (nullptr == buffer) {
@@ -447,7 +447,7 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
 				return false;
       } 
       infile.seekg(0, infile.end); 
-			std::streamoff length = infile.tellg(); 
+			unsigned long length = (unsigned long) infile.tellg(); 
       infile.seekg(0, infile.beg); 
       char* buffer = new char[length+1]; 
       if (NULL == buffer) { 
@@ -498,7 +498,7 @@ bool TextClassifier::batch_predict (const std::string& dir, const std::string& o
       return false;
     }
     infile.seekg(0, infile.end); 
-		std::streamoff length = infile.tellg(); 
+		unsigned long length = (unsigned long) infile.tellg(); 
     infile.seekg(0, infile.beg); 
     char* buffer = new char[length+1]; 
     if (NULL == buffer) { 
@@ -567,7 +567,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   }
   dirs.clear ();
   for (auto p = class_map.begin (); p != class_map.end (); ++p) {
-    const size_t maxindex = (size_t)p->second.size() * ratio;
+    const size_t maxindex = (size_t) (p->second.size() * ratio);
     for (size_t i = 0; i < maxindex; ++i) {
       std::string spath = train_dir + p->first + "/" + p->second[i];
       std::ifstream infile (spath);
@@ -637,7 +637,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   for (auto p = class_map.begin(); p != class_map.end(); ++p) {
     int count_right = 0;
     int count = 0;
-    const size_t start_index = (size_t)p->second.size() * ratio;
+    const size_t start_index = (size_t) (p->second.size() * ratio);
     for (size_t i = start_index; i < p->second.size(); ++i) {
     // for (int i = 0; i < min; ++i) {
       std::string spath = train_dir + p->first + "/" + p->second[i];
