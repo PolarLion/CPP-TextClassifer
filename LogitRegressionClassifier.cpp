@@ -168,7 +168,8 @@ bool LogitRegressionClassifier::save_model(const char* model_file)
   temp[0] = features_num;
   temp[1] = class_num;
   fwrite (temp, sizeof(long), 2, pfile);
-  alglib::mnlunpack (lm, a, features_num, class_num);
+  alglib::mnlunpack (lm, a, (alglib::ae_int_t &)features_num, (alglib::ae_int_t &)class_num);
+  //alglib::mnlunpack (lm, a, features_num, class_num);
   // printf("%ld\n", a.rows());
   // fwrite (s_out.c_str(), sizeof(char), s_out.size(), pfile);
   // int i = 0;
@@ -186,15 +187,8 @@ bool LogitRegressionClassifier::save_model(const char* model_file)
   for (int i = 0; i < class_num-1; ++i) {
   	for (int j = 0; j < features_num+1; ++j) {
   		temp2[index++] = a[i][j];
-  		// printf("%f ", a[i][j]);
   	}
-  	// printf("\n");
   }
-  // printf("\n");
-  // for (int i = 0; i < length; ++i) {
-  // 	printf("%f ", temp2[i]);
-  // }
-  // printf("\n");
 
   fwrite (temp2, sizeof (double), length, pfile);
   free (temp2);
@@ -284,7 +278,7 @@ bool LogitRegressionClassifier::free_model()
 {
 	if ( is_free ) {
 		printf("free model successful!\n");
-		return false;
+		return true;
 	}
 	training_size = 0;
 	features_num = 0;
