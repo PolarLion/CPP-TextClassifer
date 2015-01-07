@@ -50,7 +50,7 @@ bool RunTimeLog::write_log (LogType type, const char* logtext, ...)
 		 return false;
 	 }
 	} 
-	log_file << "<" << type_to_str (type) << " time = \"" << ctime() << "\">"; 
+	log_file << "  <" << type_to_str (type) << " time = \"" << ctime() << "\">"; 
 	va_list args;
 	char buffer[BUFFER_SIZE] = {0};
 	va_start (args, logtext);
