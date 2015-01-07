@@ -78,26 +78,36 @@ TextClassifier::TextClassifier(
   , classifier(NULL)
 	, runtime_log (log_file_path)
 {
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::TextClassifier ()");
   if ( classifiertype::ClassifierType::Bayesian == classifier_type ) {
     classifier = new bayesianc::BayesianTextClassifier();
+		runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
+			"TextClassifier::TextClassifier () new BayesianTextClassifier");
   }
   else if ( classifiertype::ClassifierType::RandomForest == classifier_type ) {
     classifier = new randomforestc::RandomForestClassifier();
+		runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
+			"TextClassifier::TextClassifier () : new RandomForestClassifier");	
   }
   else if ( classifiertype::ClassifierType::LogitRegression == classifier_type ) {
     classifier = new logitregressionc::LogitRegressionClassifier();
+		runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
+			"TextClassifier::TextClassifier () : LogitRegressionClassifier");
   }
   else {
   }
 
   if ( NULL == classifier ) {
-    printf ("TextClassifier::TextClassifier(): can't allocate memory for classifier\n");
 		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::TextClassifier(): can't allocate memory for classifier");
   }
-  load_features();
+  if (!load_features()) {
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::TextClassifier():load features error");
+	}
+	else {
+		runtime_log.write_log (runtime_log.LOGTYPE_WARNING, "TextClassifier::TextClassifier() : load features success");
+	}
   std::ofstream outfile(training_file_path);
   if ( outfile.fail() ) {
-    printf("TextClassifier::TextClassifier(): error in opening %s\n", training_file_path);
 		runtime_log.write_log (runtime_log.LOGTYPE_ERROR,
 			"TextClassifier::TexiClassifier() : error in opening %s", training_file_path);
   }
@@ -107,6 +117,7 @@ TextClassifier::TextClassifier(
 
 TextClassifier::~TextClassifier()
 {
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::~TextClassifier()");
   classifier->free_model();
   if ( NULL != classifier )
     delete classifier;
@@ -152,16 +163,21 @@ bool TextClassifier::train()
 {
 	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::train () : start training on file");
   if ( !classifier->train_on_file (training_file_path) ) {
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+				"TextClassifier::train () : error in call classifier->train_on_file () %s", training_file_path);
     return false;
   }
 	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::train () : finished training on file");
   printf ("TextClassifier::training_on_file() : finished training on file\n");
   if ( !classifier->save_model (model_file_path) ) {
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+				"TextClassifier::training_on_file() : saving model error %s", model_file_path);
     return false;
   }
 	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::train () : finished saving model");
   printf ("TextClassifier::training_on_file() : finished saving model\n");
   if ( !classifier->free_model ()) {
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::train () : error in free model");
     return false;
   }
 	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::train () : finished free model");
