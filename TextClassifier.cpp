@@ -104,7 +104,7 @@ TextClassifier::TextClassifier(
 		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::TextClassifier():load features error");
 	}
 	else {
-		runtime_log.write_log (runtime_log.LOGTYPE_WARNING, "TextClassifier::TextClassifier() : load features success");
+		runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::TextClassifier() : load features success");
 	}
   std::ofstream outfile(training_file_path);
   if ( outfile.fail() ) {
