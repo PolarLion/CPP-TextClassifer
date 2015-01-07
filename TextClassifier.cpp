@@ -578,7 +578,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
         return false;
       }
       infile.seekg (0, infile.end);
-      auto length = infile.tellg();
+      long length = (long) infile.tellg();
       infile.seekg (0, infile.beg);
       char* buffer = new char [length+1];
       if (NULL == buffer) {
@@ -648,7 +648,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       }
       ++count_files;
       infile.seekg (0, infile.end);
-      auto length = infile.tellg ();
+      long length = (long) infile.tellg ();
       infile.seekg (0, infile.beg);
       char* buffer = new char [length+1];
       buffer [length] = 0;

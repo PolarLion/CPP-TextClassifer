@@ -234,13 +234,6 @@ bool LogitRegressionClassifier::load_model(const char* model_file)
 	if ( 0 != fread (temp2, sizeof (double), length, pfile) ) {
 		a.setcontent (class_num-1, features_num+1, temp2);
 	}
-	 // for (int i = 0; i < class_num-1; ++i) {
-  // 	for (int j = 0; j < features_num+1; ++j) {
-  // 		// temp2[i * (class_num-1) + j] = a[i][j];
-  // 		printf("%f ", a[i][j]);
-  // 	}
-  // 	printf("\n");
-  // }
 
 
   // std::string s_in(buffer);
