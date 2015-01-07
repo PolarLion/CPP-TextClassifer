@@ -44,16 +44,16 @@ void test_log ();
 
 int main(int argc, char **argv)
 {
-	test_log ();
+	//test_log ();
   // test_tc(10);
-  //char *pend = NULL;
+  char *pend = NULL;
   //printf("%s\n", argv[0]);
-  //long num = strtol (argv[1], &pend, 10);
+  long num = strtol (argv[1], &pend, 10);
 //  for (size_t i = 100; i < 3500; i += 100) {
 //    test_ttc (i);
 //  }
   // test_tc(num);
-  //test_ttc (num);
+  test_ttc (num);
   // test_LRC();
   // test_TC (num);
   // fool_test();
@@ -81,7 +81,8 @@ void test_ttc (long num)
   // string path = "../training_set/test_train/";
 
   // string path = "../training_set/sougou_train/";
-  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
+  //TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::RandomForest, "");
+  TextClassifier *tc = new TextClassifier(num, codingtype::GBK, classifiertype::ClassifierType::LogitRegression, "");
   tc->auto_test (path, "io/result.xml", 0.5);
   delete tc;
 }
