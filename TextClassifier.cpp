@@ -99,7 +99,8 @@ TextClassifier::TextClassifier(
   std::ofstream outfile(training_file_path);
   if ( outfile.fail() ) {
     printf("TextClassifier::TextClassifier(): error in opening %s\n", training_file_path);
-		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::TexiClassifier() : error in opening ");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR,
+			"TextClassifier::TexiClassifier() : error in opening %s", training_file_path);
   }
   outfile.close();
 }
@@ -123,6 +124,8 @@ bool TextClassifier::load_features()
 
   if (infile.fail()) {
     printf("TextClassifier::load_features(): error open %s\n", gbk_features_file_path);
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+				"TextClassifier::load_features() : error opening %s", gbk_features_file_path);
     return false;
   }
   long i = 0;
@@ -140,23 +143,29 @@ bool TextClassifier::load_features()
     }
   }
   printf ("TextClassifier::load_features(): features num = %ld, size of features = %ld\n", features_num, i);
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
+			"TextClassifier::load_features(): features num = %d, size of features = %d", features_num, i);
   infile.close();
   return true;
 }
 
 bool TextClassifier::train()
 {
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::train () : start training on file");
   if ( !classifier->train_on_file (training_file_path) ) {
     return false;
   }
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::train () : finished training on file");
   printf ("TextClassifier::training_on_file() : finished training on file\n");
   if ( !classifier->save_model (model_file_path) ) {
     return false;
   }
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::train () : finished saving model");
   printf ("TextClassifier::training_on_file() : finished saving model\n");
   if ( !classifier->free_model ()) {
     return false;
   }
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::train () : finished free model");
   printf ("TextClassifier::training_on_file() : finished free model\n");
   return true;
 }
@@ -165,14 +174,17 @@ bool TextClassifier::load_data()
 {
   if ( !load_features() ) {
     printf("TextClassifier::load_data () : load features error\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::load_data (): load features error");
     return false;
   }
   if ( !classifier->load_model (model_file_path)) {
     printf("TextClassifier::load_data () : load model error\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::load_data (): load model error");
     return false;
   }
   if ( !load_classes()) {
     printf("TextClassifier::load_data () : load classes error\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::load_data (): load classes error");
     return false;
   }
   return true;
@@ -212,6 +224,8 @@ bool TextClassifier::add_train_data(const std::string& classname, const std::str
   std::ofstream outfile(training_file_path, std::ios::app);
   if ( outfile.fail() ) {
     printf("TextClassifier::add_train_data: error in opening %s\n", training_file_path);
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+				"TextClassifier::add_train_data() : error in opening %s", training_file_path);
     return false;
   }
 
@@ -236,6 +250,8 @@ bool TextClassifier::preprocessor()
   std::ifstream infile (training_file_path);
   if (infile.fail()) {
     printf("TextClassifier::preprocessor: error in opening train.txt\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR,
+			 	"TextClassifier::preprocessor() : error in opening %s", training_file_path);
     return false;
   }
   infile.seekg (0, infile.end);
@@ -244,6 +260,8 @@ bool TextClassifier::preprocessor()
   char *buffer = new char[length];
   if (nullptr == buffer) {
     printf("TextClassifier::preprocessor:allocate memory error\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR,
+				"TextClassifier::preprocessor::allocate memory error");
     return false;
   }
   infile.read(buffer, length);
@@ -252,6 +270,8 @@ bool TextClassifier::preprocessor()
   std::ofstream outfile(training_file_path, std::fstream::binary);
   if (outfile.fail()) {
     printf("TextClassifier::preprocessor: error in opening train.txt\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR,
+			 	"TextClassifier::preprocessor() : error in opening %s", training_file_path);
     delete buffer;
     buffer = nullptr;
     return false;
@@ -261,6 +281,8 @@ bool TextClassifier::preprocessor()
   outfile.write(buffer, length);
   outfile.close();
   printf("TextClassifier::preprocessor() : finish making train.txt\n");
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
+		"TextClassifier::preprocessor() : finish making %s", training_file_path);
   // printf("TextClassifier::preprocessor() : finish free memory\n");
   // printf("TextClassifier::preprocessor() : clear training set\n");
   save_classes();
@@ -275,11 +297,14 @@ bool TextClassifier::save_classes() const
 {
   if (classname_int.size() < 1) {
     printf ("TextClassifier::save_classes : no classes\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, "TextClassifier::save_classes : no classes");
     return false;
   }
   std::ofstream outfile(classes_file_path);
   if (outfile.fail()) {
     printf ("TextClassifier::save_classes: can't open file %s\n", classes_file_path);
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+				"TextClassifier::save_classes : can't open file %s", classes_file_path);
     return false;
   }
 
@@ -287,6 +312,7 @@ bool TextClassifier::save_classes() const
     [&outfile](std::pair<std::string, int> p){ outfile << p.first << " " << p.second << std::endl;});
   outfile.close();
   printf("TextClassifier::save_classes() : save classes successed\n");
+	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::save_classes() : save classes successed");
   return true;
 }
 
@@ -307,6 +333,8 @@ bool TextClassifier::load_classes()
   std::ifstream infile(classes_file_path);
   if (infile.fail()) {
     printf("can't open classesfile : %s\n", classes_file_path);
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+			"TextClassifier::load_classes() : error in opening classes file %s", classes_file_path);
     return false;
   }
   while (!infile.eof()) {
@@ -402,6 +430,8 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
     get_files (sub_dir, files);
     if (files.size() <= 0) {
       printf ("TextClassifier::add_training_set() : There's a empty class %s\n", sub_dir.c_str());
+			runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+				"TextClassifier::add_training_set() : There's a empty class %s", sub_dir.c_str());
       return false;
     }
 
@@ -413,7 +443,9 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
       std::ifstream infile(sub_dir+files[i]);
       if (infile.fail()) {
         printf ("TextClassifier::add_training_set() : error in opening %s\n", files[i].c_str());
-        exit (1);
+				runtime_log.write_log (runtime_log.LOGTYPE_ERROR,
+					"TextClassifier::add_training_set() : errir in opening %s", files[i].c_str());
+				return false;
       } 
       infile.seekg(0, infile.end); 
       int length = infile.tellg(); 
@@ -421,6 +453,8 @@ bool TextClassifier::add_training_set (const std::string& train_dir)
       char* buffer = new char[length+1]; 
       if (NULL == buffer) { 
         printf ("TextClassifier::add_training_set() : can't allocate memory\n");
+				runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+						"TextClassifier::add_training_set() : can't allocate memory");
         return false;
       }
       buffer[length] = 0;
@@ -442,6 +476,8 @@ bool TextClassifier::batch_predict (const std::string& dir, const std::string& o
   std::ofstream outfile (outfilename);
   if (outfile.fail()) {
     printf("TextClassifier::batch_predict() : error in opening %s\n", outfilename.c_str());
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+		  "TextClassifier::batch_predict(): error in opening outfile %s", outfilename.c_str());
     return false;
   }
   system_clock::time_point start_time = system_clock::now();
@@ -458,6 +494,8 @@ bool TextClassifier::batch_predict (const std::string& dir, const std::string& o
     ++count_files;
     if (infile.fail()) {
       printf("TextClassifier::batch_predict() : error in opening %s\n", (dir+(*p)).c_str());
+			runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+				"TextClassifier::bathc_predict() : error in opening %s", (dir+(*p)).c_str());
       return false;
     }
     infile.seekg(0, infile.end); 
@@ -465,7 +503,9 @@ bool TextClassifier::batch_predict (const std::string& dir, const std::string& o
     infile.seekg(0, infile.beg); 
     char* buffer = new char[length+1]; 
     if (NULL == buffer) { 
-      printf ("TextClassifier::add_training_set() : can't allocate memory\n");
+      printf ("TextClassifier::batch_predict() : can't allocate memory\n");
+			runtime_log.write_log (runtime_log.LOGTYPE_ERROR,
+				"TextClassifier::batch_predict() : can't allocate memory");
       return false;
     }
     buffer[length] = 0;
@@ -498,8 +538,10 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   using namespace std::chrono;
   std::ofstream outfile (resfile, std::ios::app);
   if (outfile.fail()) {
-      printf("TextClassifier::auto_test () : open outifle error\n");
-      return false;
+    printf("TextClassifier::auto_test () : open outifle error\n");
+		runtime_log.write_log (runtime_log.LOGTYPE_ERROR,
+			"TextClassifier::auto_test () : open outfile error %s", resfile.c_str());
+    return false;
   }
 
   // outfile << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" << std::endl;
@@ -521,6 +563,8 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     get_files (sub_path, files);
     class_map [*p] = files;
     printf ("class %s has %ld files\n", sub_path.c_str (), (long)files.size());
+		runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, 
+			"TextClassifier::auto_test()class %s has %d files", sub_path.c_str (), files.size ());
   }
   dirs.clear ();
   for (auto p = class_map.begin (); p != class_map.end (); ++p) {
@@ -530,6 +574,8 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       std::ifstream infile (spath);
       if (infile.fail ()) {
         printf ("TextClassifier::auto_test () : no such file %s\n", p->second[i].c_str());
+				runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+						"TextClassifier::auto_test() : no such file %s", p->second[i].c_str());
         return false;
       }
       infile.seekg (0, infile.end);
@@ -538,6 +584,8 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
       char* buffer = new char [length+1];
       if (NULL == buffer) {
         printf("TextClassifier::auto_test () : can't allocate memory\n");
+				runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
+					"TextClassifier::auto_test() : can't allocate memory");
         return false;
       }
       buffer [length] = 0;
