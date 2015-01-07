@@ -28,14 +28,14 @@ RunTimeLog::RunTimeLog (const char* logfilename)
 	log_file.open (log_filename, std::ios::app);
 	assert (log_file.is_open ());	
 	open_success = log_file.is_open ();
-	log_file << std::endl <<  "<start time = \"" << ctime() << "\">" << std::endl; 
+	log_file << std::endl <<  "<log time = \"" << ctime() << "\">" << std::endl; 
 }
 
 
 RunTimeLog::~RunTimeLog ()
 {
 	if (log_file.is_open ()) {
-	  log_file << "</end time = \"" << ctime() << "\">" << std::endl << std::endl; 
+	  log_file << "</log time = \"" << ctime() << "\">" << std::endl << std::endl; 
 		log_file.close ();
 	}
 	open_success = false;
