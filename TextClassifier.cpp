@@ -28,7 +28,7 @@
   const char* utf8_features_file_path = "io/utf8features.txt";
   const char* result_file_path = "io/result.txt";
   const char* classes_file_path = "io/classes.txt";
-	const char* log_file_path = "io/log.txt";
+	const char* log_file_path = "io/log.xml";
 #else
   const char* training_file_path = "io\\train.txt";
   const char* model_file_path = "io\\model.txt";
@@ -36,7 +36,7 @@
   const char* utf8_features_file_path = "io\\utf8features.txt";
   const char* result_file_path = "io\\result.txt";
   const char* classes_file_path = "io\\classes.txt";
-	const char* log_file_path = "io\\log.txt";
+	const char* log_file_path = "io\\log.xml";
 #endif
 
 
