@@ -570,7 +570,11 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   for (auto p = class_map.begin (); p != class_map.end (); ++p) {
     const size_t maxindex = (size_t) (p->second.size() * ratio);
     for (size_t i = 0; i < maxindex; ++i) {
+#ifdef __linux__
       std::string spath = train_dir + p->first + "/" + p->second[i];
+#else
+			std::string spath = train_dir + p->first + '\\' + p->second[i];
+#endif
       std::ifstream infile (spath);
       if (infile.fail ()) {
 				runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
@@ -639,7 +643,11 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     const size_t start_index = (size_t) (p->second.size() * ratio);
     for (size_t i = start_index; i < p->second.size(); ++i) {
     // for (int i = 0; i < min; ++i) {
+#ifdef __linux__
       std::string spath = train_dir + p->first + "/" + p->second[i];
+#else
+			std::string spath = train_dir + p->first + '\\' + p->second[i];
+#endif
       std::ifstream infile(spath);
       if (infile.fail()) {
 				runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 

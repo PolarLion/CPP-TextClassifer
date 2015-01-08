@@ -13,7 +13,6 @@ using namespace randomforestc;
 RandomForestClassifier::RandomForestClassifier()
 	: n_trees (50)
 {
-	printf("RandomForestClassifier\n");
 }
 
 RandomForestClassifier::RandomForestClassifier(const char* config_file)
@@ -243,5 +242,5 @@ bool RandomForestClassifier::free_model()
 	class_num = 0;
 	is_free = true;
 	printf("free model successful!\n");
-	return false;
+	return is_free;
 }
