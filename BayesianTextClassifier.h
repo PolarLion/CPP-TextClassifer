@@ -18,6 +18,7 @@ private:
   bool init_bayesiantable(int f, int c);
 public:
   BayesianTextClassifier();
+	BayesianTextClassifier(const char* config_file);
   ~BayesianTextClassifier();
   // void init_model(const char* config_file);
   bool train_on_file(const char* training_file);

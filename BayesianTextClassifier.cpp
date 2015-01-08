@@ -10,6 +10,10 @@
 
 using namespace bayesianc;
 
+BayesianTextClassifier::BayesianTextClassifier(const char* config_file)
+{
+}
+
 BayesianTextClassifier::BayesianTextClassifier()
 	: bayesiantable(NULL)
 {

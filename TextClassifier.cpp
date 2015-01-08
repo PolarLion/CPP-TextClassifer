@@ -80,17 +80,17 @@ TextClassifier::TextClassifier(
 {
 	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::TextClassifier ()");
   if ( classifiertype::ClassifierType::Bayesian == classifier_type ) {
-    classifier = new bayesianc::BayesianTextClassifier();
+    classifier = new bayesianc::BayesianTextClassifier(classifier_config_file);
 		runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
 			"TextClassifier::TextClassifier () new BayesianTextClassifier");
   }
   else if ( classifiertype::ClassifierType::RandomForest == classifier_type ) {
-    classifier = new randomforestc::RandomForestClassifier();
+    classifier = new randomforestc::RandomForestClassifier(classifier_config_file);
 		runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
 			"TextClassifier::TextClassifier () : new RandomForestClassifier");	
   }
   else if ( classifiertype::ClassifierType::LogitRegression == classifier_type ) {
-    classifier = new logitregressionc::LogitRegressionClassifier();
+    classifier = new logitregressionc::LogitRegressionClassifier(classifier_config_file);
 		runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
 			"TextClassifier::TextClassifier () : LogitRegressionClassifier");
   }
@@ -229,7 +229,7 @@ bool TextClassifier::prepare_classname_to_string()
 
 bool TextClassifier::add_train_data(const std::string& classname, const std::string& buffer)
 {
-	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::add_train_data()");
+	//runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::add_train_data()");
   if ( !prepare_cts) {
     prepare_classname_to_string();
   }
