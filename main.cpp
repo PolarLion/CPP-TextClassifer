@@ -19,7 +19,6 @@
 #include "RandomForestClassifier.h"
 #include "LogitRegressionClassifier.h"
 
-
 using namespace std;
 using std::chrono::system_clock;
 // using std::chrono::system_clock;
