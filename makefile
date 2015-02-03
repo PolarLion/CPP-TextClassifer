@@ -1,8 +1,10 @@
 CC=clang++
 CFLAGS=-c -O3 -Wall -std=c++11 
 LDFLAGS=
-SOURCES = RunTimeLog.cpp\
-  SingleCharacterSeparater.cpp TextClassifier.cpp scanfile.cpp\
+SOURCES = Features.cpp\
+	TextClassifier.cpp\
+	RunTimeLog.cpp\
+  SingleCharacterSeparater.cpp  scanfile.cpp\
 	LogitRegressionClassifier.cpp RandomForestClassifier.cpp BayesianTextClassifier.cpp \
 	ap.cpp alglibinternal.cpp linalg.cpp statistics.cpp \
 	alglibmisc.cpp specialfunctions.cpp solvers.cpp optimization.cpp \

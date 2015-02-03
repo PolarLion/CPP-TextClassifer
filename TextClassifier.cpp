@@ -23,7 +23,8 @@
 #ifdef __linux__
   const char* training_file_path = "io/train.txt";
   const char* model_file_path = "io/model.txt";
-  const char* gbk_features_file_path = "io/gbkfeatures.txt";
+  //const char* gbk_features_file_path = "io/gbkfeatures.txt";
+	const char* gbk_features_file_path = "io/gbk_features_600.txt";
   const char* utf8_features_file_path = "io/utf8features.txt";
   const char* result_file_path = "io/result.txt";
   const char* classes_file_path = "io/classes.txt";
@@ -63,18 +64,18 @@ void char_separator(std::vector<std::string>& tokens, const std::string& s, cons
 
 
 TextClassifier::TextClassifier(
-  long featurenum, 
   codingtype::SeparaterType encoding_t, 
   classifiertype::ClassifierType classifier_t,
-  const char* classifier_config_f 
+  const char* classifier_config_f, 
+	const char* features_f
   )
-  : features_num(featurenum)
-  , encoding_type(encoding_t)
-  , classifier_type(classifier_t)
-  , classifier_config_file(classifier_config_f)
-  , count_classnum(0)
-  , count_training_set(0)
-  , prepare_cts(false)
+  : encoding_type (encoding_t)
+  , classifier_type (classifier_t)
+  , classifier_config_file (classifier_config_f)
+	, features_file (features_f)
+  , count_classnum (0)
+  , count_training_set (0)
+  , prepare_cts (false)
   , classifier(NULL)
 	, runtime_log (log_file_path)
 {
@@ -125,46 +126,12 @@ TextClassifier::~TextClassifier()
   classifier = NULL;
 }
 
-bool TextClassifier::load_features()
-{
-	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL, "TextClassifier::load_features()");
-  std::ifstream infile;
-  if (codingtype::UTF8 == encoding_type)
-    infile.open(utf8_features_file_path);
-  else if(codingtype::GBK == encoding_type)
-    infile.open(gbk_features_file_path);
 
-  if (infile.fail()) {
-		if (codingtype::UTF8 == encoding_type) {
-		  runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
-				"TextClassifier::load_features() : error opening %s", utf8_features_file_path);
-		}
-		else if (codingtype::GBK == encoding_type) {
-			runtime_log.write_log (runtime_log.LOGTYPE_ERROR, 
-			  "TextClassifier::load_features() : error opening %s", gbk_features_file_path);
-		}
-    return false;
-  }
-  long i = 0;
-  while (!infile.eof() && i < features_num) {
-    std::string line;
-    std::getline(infile, line);
-    std::vector<std::string> v;
-    separater(line, v, encoding_type);
-    for (auto p = v.begin(); p != v.end(); ++p) {
-      if (p->size() > 0) {
-        features[i] = *p;
-        ++i;
-        break;
-      }
-    }
-  }
-  printf ("TextClassifier::load_features(): features num = %ld, size of features = %ld\n", features_num, i);
-	runtime_log.write_log (runtime_log.LOGTYPE_NORMAL,
-			"TextClassifier::load_features(): features num = %d, size of features = %d", features_num, i);
-  infile.close();
-  return true;
+bool TextClassifier::load_features ()
+{
+	return features.load_features (features_file);
 }
+
 
 bool TextClassifier::train()
 {
@@ -233,13 +200,8 @@ bool TextClassifier::add_train_data(const std::string& classname, const std::str
   if ( !prepare_cts) {
     prepare_classname_to_string();
   }
-  std::unordered_map<std::string, int> bag;
   std::vector<std::string> tok;
   separater(buffer, tok, encoding_type);
-  int count_word = 0;
-  std::for_each (tok.begin(), tok.end(), [&bag, &count_word](std::string s){
-    bag[s]++;
-    count_word++;});
 
   std::ofstream outfile(training_file_path, std::ios::app);
   if ( outfile.fail() ) {
@@ -248,15 +210,21 @@ bool TextClassifier::add_train_data(const std::string& classname, const std::str
     return false;
   }
 
+	std::vector<double> vec = features.doc_to_vec (tok);
+	for (auto p = vec.begin (); p != vec.end (); ++p) {
+		outfile << *p << " ";
+	}
+	/*
   for (long i = 0; i < features_num; ++i) {
     auto tp = bag.find(features[i]);
     if (tp != bag.end()) {
-      outfile << tp->second << " ";// / (double)count_word << " ";
+      outfile << tp->second / (double)count_word << " ";
     }
     else {
       outfile << 0 << " ";
     }
   }
+	*/
   outfile << std::endl << class_to_string_map[classname_to_int(classname)] << std::endl;
   count_training_set++;
   outfile.close();
@@ -291,7 +259,7 @@ bool TextClassifier::preprocessor()
     buffer = nullptr;
     return false;
   }
-  sprintf(first_trainfile_line, "%ld %ld %ld\n", count_training_set, features_num, count_classnum);
+  sprintf(first_trainfile_line, "%ld %ld %ld\n", count_training_set, get_features_number(), count_classnum);
   outfile.write(first_trainfile_line, strlen(first_trainfile_line));
   outfile.write(buffer, length);
   outfile.close();
@@ -396,20 +364,7 @@ const char* TextClassifier::predicted_category(const char* data) const
   std::unordered_map<std::string, int> bag;
   std::vector<std::string> tok;
   separater(data, tok, encoding_type);
-  int count_word = 0;
-  for (auto p = tok.begin(); p != tok.end(); ++p) {
-    bag[*p]++;
-    ++count_word;
-  }
-  double *fv = new double[features_num];
-  for (long i = 0; i < features_num; ++i) {
-    auto p = bag.find (features[i]);
-    if ( p != bag.end() ) {
-      fv[i] = p->second;// / (double)count_word;
-    }
-    else 
-      fv[i] = 0.0;
-  }
+  double *fv  = features.doc_to_ptr (tok);
   classifier->predicted_category (fv, res);
   delete fv;
   return int_to_classname(res).c_str();
@@ -551,7 +506,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   outfile << std::endl << "<test name = \"begin\">" << std::endl;
   outfile << "\t<start_time>" << std::endl;
   outfile << "\t\t" << ctime (&tt) << "\t<start_time>" << std::endl; 
-  outfile << "\t<features_number>" << features_num << "</features_number>" << std::endl;
+  outfile << "\t<features_number>" << get_features_number () << "</features_number>" << std::endl;
   std::unordered_map<std::string, std::vector<std::string>> class_map;
   std::vector<std::string> dirs;
 
@@ -642,7 +597,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
     int count = 0;
     const size_t start_index = (size_t) (p->second.size() * ratio);
     for (size_t i = start_index; i < p->second.size(); ++i) {
-    // for (int i = 0; i < min; ++i) {
+    //for (int i = 0; i < start_index; ++i) {
 #ifdef __linux__
       std::string spath = train_dir + p->first + "/" + p->second[i];
 #else
@@ -695,7 +650,7 @@ bool TextClassifier::auto_test (const std::string& train_dir, const std::string&
   }
 
   const double drecall = count_all_right / (double)count_all;
-  outfile << "\t\t" << features_num << "\t" << drecall << std::endl;
+  outfile << "\t\t" << get_features_number () << "\t" << drecall << std::endl;
   outfile << "\t</detail_information>" << std::endl;
   outfile << "\t<F1_value>" << drecall << "</F1_value>" << std::endl;
   printf("total accuracy %f\n", drecall);

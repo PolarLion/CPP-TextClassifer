@@ -10,6 +10,7 @@
 #include "Classifier.h"
 #include "SingleCharacterSeparater.h"
 #include "RunTimeLog.h"
+#include "Features.h"
 
 #define FEATURE_NUM 3500
 
@@ -18,12 +19,12 @@ void char_separator(std::vector<std::string>& tokens, const std::string& s, cons
 class TextClassifier
 {
 private:
-  const long features_num;
 	const codingtype::SeparaterType encoding_type;
 	const classifiertype::ClassifierType classifier_type;
   const char* classifier_config_file;
+	const char* features_file;
 
-  std::string features[FEATURE_NUM];
+  //std::string features[FEATURE_NUM];
 	long count_classnum;
 	long count_training_set;
 	bool prepare_cts;
@@ -35,6 +36,7 @@ private:
   std::unordered_map<std::string, int> classname_int;
   std::unordered_map<int, std::string> class_to_string_map;
 	mutable RunTimeLog runtime_log;
+	Features features;
   
   int classname_to_int(const std::string& classname) const {
     if (classname_int.find(classname) != classname_int.end()) {
@@ -44,7 +46,7 @@ private:
   }
 
   std::string int_to_classname(int integer) const {
-    if (int_classname.find(integer) != int_classname.end()) {
+     if (int_classname.find(integer) != int_classname.end()) {
       return int_classname.at(integer);
     }
     return std::string();
@@ -56,10 +58,10 @@ private:
   bool load_classes();
 public:
 	TextClassifier(
-    long featurenum = 0, 
 		codingtype::SeparaterType encoding_t = codingtype::SeparaterType::GBK, 
     classifiertype::ClassifierType classifier_t = classifiertype::ClassifierType::Bayesian, 
-    const char* classifier_config_f = ""
+    const char* classifier_config_f = "",
+		const char* features_f = ""
     );
 	~TextClassifier();
 
@@ -82,7 +84,7 @@ public:
   bool auto_test (const std::string& train_dir, const std::string& resfile, const double ratio);
 
   size_t get_features_number () const {
-    return features_num;
+    return features.get_features_num ();
   }
 
   size_t get_training_size () const {
@@ -93,5 +95,5 @@ public:
     return count_classnum;
   }
 
-};
+}; 
 
