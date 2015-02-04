@@ -24,8 +24,8 @@
   const char* training_file_path = "io/train.txt";
   const char* model_file_path = "io/model.txt";
   //const char* gbk_features_file_path = "io/gbkfeatures.txt";
-	const char* gbk_features_file_path = "io/gbk_features_600.txt";
-  const char* utf8_features_file_path = "io/utf8features.txt";
+	//const char* gbk_features_file_path = "io/gbk_features_600.txt";
+  //const char* utf8_features_file_path = "io/utf8features.txt";
   const char* result_file_path = "io/result.txt";
   const char* classes_file_path = "io/classes.txt";
 	const char* log_file_path = "io/log.xml";
@@ -39,7 +39,7 @@
 	const char* log_file_path = "io\\log.xml";
 #endif
 
-
+/*
 void char_separator(std::vector<std::string>& tokens, const std::string& s, const std::string& drop_char)
 {
   std::unordered_set<char> drops;
@@ -59,12 +59,12 @@ void char_separator(std::vector<std::string>& tokens, const std::string& s, cons
     tokens.push_back(temp);
   temp.clear();
 }
-
+*/
 
 
 
 TextClassifier::TextClassifier(
-  codingtype::SeparaterType encoding_t, 
+  EncodingType  encoding_t, 
   classifiertype::ClassifierType classifier_t,
   const char* classifier_config_f, 
 	const char* features_f
@@ -201,7 +201,6 @@ bool TextClassifier::add_train_data(const std::string& classname, const std::str
     prepare_classname_to_string();
   }
   std::vector<std::string> tok;
-  separater(buffer, tok, encoding_type);
 
   std::ofstream outfile(training_file_path, std::ios::app);
   if ( outfile.fail() ) {
@@ -214,17 +213,6 @@ bool TextClassifier::add_train_data(const std::string& classname, const std::str
 	for (auto p = vec.begin (); p != vec.end (); ++p) {
 		outfile << *p << " ";
 	}
-	/*
-  for (long i = 0; i < features_num; ++i) {
-    auto tp = bag.find(features[i]);
-    if (tp != bag.end()) {
-      outfile << tp->second / (double)count_word << " ";
-    }
-    else {
-      outfile << 0 << " ";
-    }
-  }
-	*/
   outfile << std::endl << class_to_string_map[classname_to_int(classname)] << std::endl;
   count_training_set++;
   outfile.close();
@@ -363,7 +351,6 @@ const char* TextClassifier::predicted_category(const char* data) const
   int res;
   std::unordered_map<std::string, int> bag;
   std::vector<std::string> tok;
-  separater(data, tok, encoding_type);
   double *fv  = features.doc_to_ptr (tok);
   classifier->predicted_category (fv, res);
   delete fv;

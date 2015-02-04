@@ -30,6 +30,12 @@ void keep_window_open()
 
 void test_ttc (const char* features_file, const std::string& s = "", double r = 0.8);
 
+void test_features (const char* filename) {
+	Features t;
+	t.load_features (filename);
+}
+
+
 int main(int argc, char **argv)
 {
   //printf("%s\n", argv[0]);
@@ -40,7 +46,8 @@ int main(int argc, char **argv)
 	printf ("%d\n", argc);
   //long num = strtol (argv[1], &pend, 10);
 	if ( argc == 2) {
-		test_ttc (argv[1]);
+		test_features (argv[1]);
+		//test_ttc (argv[1]);
 	}
 	else if (argc == 3) {
 		test_ttc (argv[1], std::string(argv[2]));
@@ -57,7 +64,7 @@ int main(int argc, char **argv)
 
 void test_ttc (const char* features_file, const std::string& s, double r)
 {
-  TextClassifier *tc = new TextClassifier( codingtype::GBK, classifiertype::ClassifierType::RandomForest, "", features_file);
+  TextClassifier *tc = new TextClassifier( EncodingType::GBK, classifiertype::ClassifierType::RandomForest, "", features_file);
 	if ( s.empty ()) {
 		// string path = "../training_set/easy_train/";
 		std::string path  = "../training_set/sougou_train/";

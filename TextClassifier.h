@@ -8,29 +8,30 @@
 
 
 #include "Classifier.h"
-#include "SingleCharacterSeparater.h"
+//#include "SingleCharacterSeparater.h"
 #include "RunTimeLog.h"
 #include "Features.h"
 
-#define FEATURE_NUM 3500
 
-void char_separator(std::vector<std::string>& tokens, const std::string& s, const std::string& drop_char);
+enum EncodingType {
+	GBK = 0,
+	UTF_8 = 1
+};
+
 
 class TextClassifier
 {
 private:
-	const codingtype::SeparaterType encoding_type;
+	const EncodingType encoding_type;
 	const classifiertype::ClassifierType classifier_type;
   const char* classifier_config_file;
 	const char* features_file;
 
-  //std::string features[FEATURE_NUM];
 	long count_classnum;
 	long count_training_set;
 	bool prepare_cts;
 
 	Classifier* classifier;
-  mutable SingleCharacterSeparater separater;
   char first_trainfile_line[128];
   std::unordered_map<int, std::string> int_classname;
   std::unordered_map<std::string, int> classname_int;
@@ -58,7 +59,7 @@ private:
   bool load_classes();
 public:
 	TextClassifier(
-		codingtype::SeparaterType encoding_t = codingtype::SeparaterType::GBK, 
+		EncodingType encoding_t = EncodingType::GBK, 
     classifiertype::ClassifierType classifier_t = classifiertype::ClassifierType::Bayesian, 
     const char* classifier_config_f = "",
 		const char* features_f = ""
@@ -83,15 +84,14 @@ public:
 
   bool auto_test (const std::string& train_dir, const std::string& resfile, const double ratio);
 
-  size_t get_features_number () const {
-    return features.get_features_num ();
+  long get_features_number () const {
+    return features.get_features_dim ();
   }
 
-  size_t get_training_size () const {
+	long get_training_size () const {
     return count_training_set;
   }
-
-  size_t get_classes_number () const {
+  long get_classes_number () const {
     return count_classnum;
   }
 
